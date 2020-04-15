@@ -16,11 +16,21 @@ include('layout/topnav.php');
 
 $teacherSql = "SELECT * FROM teachers";
 $result = mysqli_query($conn, $teacherSql);
+$teachers = $result->fetch_all(MYSQLI_ASSOC);
 $teacherCount = $result->num_rows;
 
 $studentSql = "SELECT * FROM students";
 $result = mysqli_query($conn, $studentSql);
 $studentCount = $result->num_rows;
+
+$sectionSql = "SELECT * FROM sections";
+$result = mysqli_query($conn, $sectionSql);
+$sections = $result->fetch_all(MYSQLI_ASSOC);
+
+$yearsSql = "SELECT * FROM years";
+$result = mysqli_query($conn, $yearsSql);
+$years = $result->fetch_all(MYSQLI_ASSOC);
+
 
 ?>
 
@@ -59,7 +69,7 @@ $studentCount = $result->num_rows;
 <div class="container-fluid">
     <!-- Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">add exam</h1>
+        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">add subject</h1>
     </div>
 
     <div class="row">
@@ -68,14 +78,46 @@ $studentCount = $result->num_rows;
             <div class="alert alert-success d-none success_message text-center"></div>
         </div>
         <div class="container add-student">
-            <form action="<?=APP?>/controllers/semesters/add.php" method="POST" class="add_semester_form">
+            <form action="<?=APP?>/controllers/subjects/add.php" method="POST" class="add_subject_form" enctype="multipart/form-data">
                 <div class="form-row">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-6">
                         <label for="name">Name</label>
                         <input type="text" id="name" class="form-control" name="name">
                     </div>
+                    <div class="form-group col-md-2">
+                        <label for="teacher_id">Teacher</label>
+                        <select name="teacher_id" id="teacher_id" class="form-control">
+                            <?php
+                            foreach ($teachers as $teacher) { ?>
+                                <option value="<?= $teacher['id']?>"><?= $teacher['name']?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="section_id">Section</label>
+                        <select name="section_id" id="section_id" class="form-control">
+                            <?php
+                            foreach ($sections as $section) { ?>
+                                <option value="<?= $section['id']?>"><?= $section['name']?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="year_id">Year</label>
+                        <select name="year_id" id="year_id" class="form-control">
+                            <?php
+                            foreach ($years as $year) { ?>
+                                <option value="<?= $year['id']?>"><?= $year['name']?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="file" class="btn btn-info"><i class="fa fa-file"></i> Choose Subject File</label>
+                        <input type="file" id="file" class="d-none file" name="file">
+                    </div>
+
                 </div>
-                <button type="submit" class="btn btn-primary btn-block add_semester_button" name="submit">Add</button>
+                <button type="submit" class="btn btn-primary btn-block add_subject_button" name="submit">Add</button>
             </form>
 
         </div>
@@ -85,15 +127,17 @@ $studentCount = $result->num_rows;
 
 <?php include('../layout/footer.php');?>
 
+
+
 <script>
     $(document).ready(function () {
 
-        $('.add_semester_button').click(function (e) {
+        $('.add_subject_button').click(function (e) {
             e.preventDefault();
 
-            let form = $('.add_semester_form'), error = [];
+            let form = $('.add_subject_form'), formData = new FormData(form[0]),  error = [];
 
-            $('.add_semester_form input').each(function () {
+            $('.add_subject_form input, select').each(function () {
                 if ($(this).val() === ''){
                     // error.push(true);
                     $(this).css({
@@ -114,7 +158,11 @@ $studentCount = $result->num_rows;
                     url: form.attr('action'),
                     type: form.attr('method'),
                     dataType: 'json',
-                    data: form.serialize(),
+                    crossDomain: true,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: formData,
                     success: function (data) {
                         if (data.status === 0){
                             $('.error_message').removeClass('d-none').html(data.message);

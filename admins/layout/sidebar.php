@@ -106,28 +106,74 @@
 
       <!-- End years -->
 
-          <!-- Start years -->
-          <hr class="sidebar-divider">
+      <!-- Start semesters -->
+      <hr class="sidebar-divider">
 
-          <!-- TEACHER Heading -->
-          <div class="sidebar-heading">
-              Semester
-          </div>
+      <!-- TEACHER Heading -->
+      <div class="sidebar-heading">
+          Semester
+      </div>
 
-          <li class="nav-item">
-              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#semester" aria-expanded="true" aria-controls="collapseProfi">
-                  <i class="fas fa-fw fa-cog"></i>
-                  <span>Semester</span>
-              </a>
-              <div id="semester" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                  <div class="bg-white py-2 collapse-inner rounded">
-                      <a class="collapse-item" href="<?=APP?>/admins/add-semester.php">Add Semester</a>
-                      <a class="collapse-item" href="<?=APP?>/admins/all-semester.php">Semester</a>
-                  </div>
+      <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#semester" aria-expanded="true" aria-controls="collapseProfi">
+              <i class="fas fa-fw fa-cog"></i>
+              <span>Semester</span>
+          </a>
+          <div id="semester" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                  <a class="collapse-item" href="<?=APP?>/admins/add-semester.php">Add Semester</a>
+                  <a class="collapse-item" href="<?=APP?>/admins/all-semester.php">Semester</a>
               </div>
-          </li>
+          </div>
+      </li>
 
-          <!-- End years -->
+      <!-- End semesters -->
+
+      <!-- Start subjects -->
+      <hr class="sidebar-divider">
+
+      <!-- TEACHER Heading -->
+      <div class="sidebar-heading">
+          Subjects
+      </div>
+
+      <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#subject" aria-expanded="true" aria-controls="collapseProfi">
+              <i class="fas fa-fw fa-cog"></i>
+              <span>Subjects</span>
+          </a>
+          <div id="subject" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                  <a class="collapse-item" href="<?=APP?>/admins/add-subject.php">Add Subject</a>
+                  <a class="collapse-item" href="<?=APP?>/admins/all-subject.php">Subject</a>
+              </div>
+          </div>
+      </li>
+
+      <!-- End subjects -->
+
+      <!-- Start exams -->
+      <hr class="sidebar-divider">
+
+      <!-- TEACHER Heading -->
+      <div class="sidebar-heading">
+          Exams
+      </div>
+
+      <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#exam" aria-expanded="true" aria-controls="collapseProfi">
+              <i class="fas fa-fw fa-cog"></i>
+              <span>Exams</span>
+          </a>
+          <div id="exam" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                  <a class="collapse-item" href="<?=APP?>/admins/add-exam.php">Add Exam</a>
+                  <a class="collapse-item" href="<?=APP?>/admins/all-exam.php">Exam</a>
+              </div>
+          </div>
+      </li>
+
+      <!-- End exams -->
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
