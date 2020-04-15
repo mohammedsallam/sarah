@@ -59,7 +59,7 @@ $studentCount = $result->num_rows;
 <div class="container-fluid">
     <!-- Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">add teacher</h1>
+        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">add year</h1>
     </div>
 
     <div class="row">
@@ -68,35 +68,14 @@ $studentCount = $result->num_rows;
             <div class="alert alert-success d-none success_message text-center"></div>
         </div>
         <div class="container add-student">
-            <form action="<?=APP?>/controllers/teachers/add.php" method="POST" class="add_teacher_form">
+            <form action="<?=APP?>/controllers/years/add.php" method="POST" class="add_year_form">
                 <div class="form-row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-12">
                         <label for="name">Name</label>
                         <input type="text" id="name" class="form-control" name="name">
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="email">E-mail</label>
-                        <input type="email" id="email" class="form-control" name="email">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="phone">Phone</label>
-                        <input type="tel" id="phone" class="form-control" name="phone">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" class="form-control" name="password">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="confirm_password">Confirm Password</label>
-                        <input type="password" id="confirm_password" class="form-control" name="confirm_password">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block add_teacher_button" name="submit">Add</button>
+                    <button type="submit" class="btn btn-primary btn-block add_year_button" name="submit">Add</button>
             </form>
-
-
-
-
 
         </div>
     </div>
@@ -108,12 +87,12 @@ $studentCount = $result->num_rows;
 <script>
     $(document).ready(function () {
 
-        $('.add_teacher_button').click(function (e) {
+        $('.add_year_button').click(function (e) {
             e.preventDefault();
 
-            let form = $('.add_teacher_form'), error = [];
+            let form = $('.add_year_form'), error = [];
 
-            $('.add_teacher_form input').each(function () {
+            $('.add_year_form input').each(function () {
                 if ($(this).val() === ''){
                     error.push(true);
                     $(this).css({
