@@ -22,6 +22,10 @@ $studentSql = "SELECT * FROM students";
 $result = mysqli_query($conn, $studentSql);
 $studentCount = $result->num_rows;
 
+$yearsSql = "SELECT * FROM years";
+$result = mysqli_query($conn, $yearsSql);
+$years = $result->fetch_all(MYSQLI_ASSOC);
+
 ?>
 
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -81,6 +85,16 @@ $studentCount = $result->num_rows;
                         <input type="number" id="fees" class="form-control" name="fees">
                     </div>
                 </div>
+                <div class="form-row">
+                    <?php
+                    foreach ($years as $year) { ?>
+                        <div class="form-group col-md-2">
+                            <label style="cursor: pointer" for="year_<?=$year['id']?>" class="text-capitalize form-label-group"><?= $year['name']?></label>
+                            <input class="form-check-inline" style="width: 16px; height: 16px" type="checkbox" id="year_<?=$year['id']?>" name="year_id[]" value="<?= $year['id'] ?>">
+                        </div>
+                    <?php } ?>
+
+                </div>
                 <button type="submit" class="btn btn-primary btn-block add_section_button" name="submit">Add</button>
             </form>
 
@@ -101,9 +115,9 @@ $studentCount = $result->num_rows;
 
             $('.add_section_form input').each(function () {
                 if ($(this).val() === ''){
-                    error.push(true);
+                    // error.push(true);
                     $(this).css({
-                        border: '1px solid red'
+                        border: '1px solid red',
                     });
 
                     $(this).focus(function () {

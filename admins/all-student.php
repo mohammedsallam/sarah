@@ -14,7 +14,13 @@ include('layout/sidebar.php');
 
 include('layout/topnav.php');
 
-$sql = "SELECT * FROM students";
+$year_id = (int) @$_GET['year_id'];
+$section_id = (int) @$_GET['section_id'];
+
+$sql = "SELECT students.*, years.name AS 'YNAME', sections.name AS 'SNAME' FROM students
+        INNER JOIN years on years.id=students.year_id
+        INNER JOIN sections on sections.id=students.section_id
+        WHERE year_id = '$year_id' AND section_id = '$section_id'";
 $result = mysqli_query($conn, $sql);
 $students = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -66,8 +72,12 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
         <div class="col-md-12">
             <table class="table table-bordered students_table">
                 <thead>
-                <tr>
+                <tr class="bg-dark text-light">
                     <th>Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                    <th>Department</th>
+                    <th>Year</th>
                     <th>Email</th>
                     <th>Created at</th>
                     <th>Control</th>
@@ -78,11 +88,16 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
                     foreach ($students as $student) { ?>
                         <tr>
                             <td><?= $student['name']?></td>
+                            <td><?= $student['last_name']?></td>
+                            <td><?= $student['username']?></td>
+                            <td><?= $student['SNAME']?></td>
+                            <td><?= $student['YNAME']?></td>
                             <td><?= $student['email']?></td>
                             <td><?= date('Y-m-d', strtotime($student['created_at'])) ?></td>
                             <td>
                                 <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/students/delete.php?id=<?=$student['id']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
                                 <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/students/get_info.php?id=<?=$student['id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
+                                <a href="<?=APP?>/admins/more-student.php?student_id=<?=$student['id']?>&year_id=<?=$_GET['year_id']?>&section_id=<?=$_GET['section_id']?>" class="btn btn-info btn-sm"><i class="fa fa-user"></i></a>
                             </td>
                         </tr>
                     <?php } ?>
@@ -90,6 +105,10 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
                 <tfoot>
                 <tr>
                     <th>Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                    <th>Department</th>
+                    <th>Year</th>
                     <th>Email</th>
                     <th>Created at</th>
                     <th>Control</th>
@@ -122,6 +141,7 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
         </div>
     </div>
 </div>
+
 <!-- Delete teacher modal -->
 <div class="modal fade delete_modal" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

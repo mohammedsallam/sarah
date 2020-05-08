@@ -1,3 +1,14 @@
+<?php
+
+$sectionsSql = "SELECT  sections.* FROM sections 
+                    LEFT JOIN section_years on sections.id=section_years.section_id GROUP BY sections.id";
+$result = mysqli_query($conn, $sectionsSql);
+$sections = $result->fetch_all(MYSQLI_ASSOC);
+
+
+
+?>
+
 <!-- Page Wrapper -->
 <div id="wrapper">
       
@@ -12,8 +23,42 @@
           <div class="sidebar-brand-text mx-3"></div>
         </a>
 
-        <!-- Start Teacher -->
-        <hr class="sidebar-divider">
+
+          <!-- Start Students -->
+          <hr class="sidebar-divider">
+          <li class="sidebar-heading">
+              Students
+          </li>
+          <?php
+
+          foreach ($sections as $section) { ?>
+              <li class="nav-item">
+                  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#student_<?=$section['id']?>" aria-expanded="true" aria-controls="collapseProfi">
+                      <i class="fas fa-fw fa-cog"></i>
+                      <span><?=$section['name']?></span>
+                  </a>
+                  <div id="student_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                      <div class="bg-white py-2 collapse-inner rounded">
+                          <a class="collapse-item" href="<?=APP?>/admins/add-student.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Student</a>
+                          <?php
+                          $id = $section['id'];
+                          $yearsSql = "SELECT section_years.*, years.name FROM section_years 
+                            LEFT JOIN years on years.id=section_years.year_id 
+                            WHERE section_years.section_id = '$id' GROUP BY years.id";
+                          $result = mysqli_query($conn, $yearsSql);
+                          $years = $result->fetch_all(MYSQLI_ASSOC);
+                          foreach ($years as $year) { ?>
+                              <a class="collapse-item" href="<?=APP?>/admins/all-student.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
+                          <?php } ?>
+
+                      </div>
+                  </div>
+              </li>
+          <?php  } ?>
+
+
+
+          <!-- End student -->
   
         <!-- TEACHER Heading -->
         <div class="sidebar-heading">
@@ -35,29 +80,7 @@
         </li>
           <!-- End Teacher -->
 
-      <!-- Start Students -->
-      <hr class="sidebar-divider">
 
-      <!-- TEACHER Heading -->
-      <div class="sidebar-heading">
-          Students
-      </div>
-
-      <!-- Nav Item - TEACHERS -->
-      <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#student" aria-expanded="true" aria-controls="collapseProfi">
-              <i class="fas fa-fw fa-cog"></i>
-              <span>Students</span>
-          </a>
-          <div id="student" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-              <div class="bg-white py-2 collapse-inner rounded">
-                  <a class="collapse-item" href="<?=APP?>/admins/add-student.php">Add Student</a>
-                  <a class="collapse-item" href="<?=APP?>/admins/all-student.php">Students</a>
-              </div>
-          </div>
-      </li>
-
-      <!-- End student -->
 
       <!-- Start Sections -->
       <hr class="sidebar-divider">

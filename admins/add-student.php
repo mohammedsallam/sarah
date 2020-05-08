@@ -78,14 +78,50 @@ $years = $result->fetch_all(MYSQLI_ASSOC);
         </div>
         <div class="container add-student">
             <form action="<?=APP?>/controllers/students/add.php" method="POST" class="add_teacher_form">
+                <input type="hidden" name="section_id" value="<?=@$_GET['section_id']?>">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="name">Name</label>
                         <input type="text" id="name" class="form-control" name="name">
                     </div>
                     <div class="form-group col-md-6">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" class="form-control" name="last_name">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="section">Department</label>
+                        <input readonly type="text" id="section" class="form-control bg-white" value="<?=@$_GET['section']?>">
+                    </div>
+                    <div class="form-group col-md-6">
+
+                        <?php
+                        $id = $_GET['section_id'];
+                        $name = $_GET['section'];
+                        $yearsSql = "SELECT section_years.*, years.name 
+                                     AS 'YNAME', sections.name 
+                                     FROM section_years
+                                     LEFT JOIN years on years.id=section_years.year_id
+                                     LEFT JOIN sections on sections.id=section_years.section_id 
+                                     WHERE section_years.section_id = '$id' AND sections.name = '$name' 
+                                     GROUP BY years.id";
+                        $result = mysqli_query($conn, $yearsSql);
+                        $years = $result->fetch_all(MYSQLI_ASSOC);
+                        ?>
+                        <label for="year_id">Year</label>
+                        <select name="year_id" id="year_id" class="form-control">
+                            <?php
+                            foreach ($years as $year) { ?>
+                                <option value="<?= $year['year_id']?>"><?= $year['YNAME']?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label for="email">E-mail</label>
                         <input type="email" id="email" class="form-control" name="email">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" class="form-control" name="username">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="password">Password</label>
@@ -95,41 +131,23 @@ $years = $result->fetch_all(MYSQLI_ASSOC);
                         <label for="confirm_password">Confirm Password</label>
                         <input type="password" id="confirm_password" class="form-control" name="confirm_password">
                     </div>
-                    <div class="form-group col-md-2">
-                        <label for="fees">Fees</label>
-                        <input type="number" id="fees" class="form-control" name="fees" min="0">
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="payed">Payed fees</label>
-                        <input type="number" id="payed" class="form-control" name="payed" min="0">
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="phone">Remaining fees</label>
-                        <input type="number" id="remaining" class="form-control" name="remaining" min="0">
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="section_id">Section</label>
-                        <select name="section_id" id="section_id" class="form-control">
-                            <?php
-                            foreach ($sections as $section) { ?>
-                                <option value="<?= $section['id']?>"><?= $section['name']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="year_id">Year</label>
-                        <select name="year_id" id="year_id" class="form-control">
-                            <?php
-                            foreach ($years as $year) { ?>
-                                <option value="<?= $year['id']?>"><?= $year['name']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
+<!--                    <div class="form-group col-md-2">-->
+<!--                        <label for="fees">Fees</label>-->
+<!--                        <input type="number" id="fees" class="form-control" name="fees" min="0">-->
+<!--                    </div>-->
+<!--                    <div class="form-group col-md-2">-->
+<!--                        <label for="payed">Payed fees</label>-->
+<!--                        <input type="number" id="payed" class="form-control" name="payed" min="0">-->
+<!--                    </div>-->
+<!--                    <div class="form-group col-md-2">-->
+<!--                        <label for="phone">Remaining fees</label>-->
+<!--                        <input type="number" id="remaining" class="form-control" name="remaining" min="0">-->
+<!--                    </div>-->
+
 
                 </div>
                 <button type="submit" class="btn btn-primary btn-block add_teacher_button" name="submit">Add</button>
             </form>
-
         </div>
     </div>
 

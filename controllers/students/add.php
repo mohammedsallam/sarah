@@ -4,10 +4,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     require_once '../../connection.php';
 
     $name = $_POST['name'];
+    $last_name = $_POST['last_name'];
+    $username = $_POST['username'];
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-    $fess = filter_var($_POST['fees'], FILTER_SANITIZE_NUMBER_INT);
-    $payed = filter_var($_POST['payed'], FILTER_SANITIZE_NUMBER_INT);
-    $remaining = filter_var($_POST['remaining'], FILTER_SANITIZE_NUMBER_INT);
+//    $fess = filter_var($_POST['fees'], FILTER_SANITIZE_NUMBER_INT);
+//    $payed = filter_var($_POST['payed'], FILTER_SANITIZE_NUMBER_INT);
+//    $remaining = filter_var($_POST['remaining'], FILTER_SANITIZE_NUMBER_INT);
     $section_id = filter_var($_POST['section_id'], FILTER_SANITIZE_NUMBER_INT);
     $year_id = filter_var($_POST['year_id'], FILTER_SANITIZE_NUMBER_INT);
     $password = $_POST['password'];
@@ -44,11 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
 
         $password = password_hash($password, CRYPT_BLOWFISH);
-        $sql = "INSERT INTO students SET name='$name', email='$email', password='$password', year_id = '$year_id', section_id = '$section_id'";
+        $sql = "INSERT INTO students SET name='$name', last_name = '$last_name', username = '$username' email='$email', password='$password', year_id = '$year_id', section_id = '$section_id'";
         $result = mysqli_query($conn, $sql);
-        $student_id = mysqli_insert_id($conn);
-        $sql = "INSERT INTO fees SET student_id='$student_id', section_id='$section_id', fees='$fess', payed='$payed', remaining = '$remaining'";
-        $result = mysqli_query($conn, $sql);
+//        $student_id = mysqli_insert_id($conn);
+//        $sql = "INSERT INTO fees SET student_id='$student_id', section_id='$section_id', fees='$fess', payed='$payed', remaining = '$remaining'";
+//        $result = mysqli_query($conn, $sql);
 
         echo json_encode(['status' => 1, 'message' => 'Student added successfully']);
     }
