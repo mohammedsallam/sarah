@@ -31,7 +31,11 @@ $yearsSql = "SELECT * FROM years";
 $result = mysqli_query($conn, $yearsSql);
 $years = $result->fetch_all(MYSQLI_ASSOC);
 
+$sql = "SELECT * FROM semesters";
+$result = mysqli_query($conn, $sql);
+$semesters = $result->fetch_all(MYSQLI_ASSOC);
 
+$section_id = $_GET['section_id'];
 ?>
 
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -81,41 +85,57 @@ $years = $result->fetch_all(MYSQLI_ASSOC);
             <form action="<?=APP?>/controllers/subjects/add.php" method="POST" class="add_subject_form" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="name">Name</label>
+                        <label for="name">Subject Name</label>
                         <input type="text" id="name" class="form-control" name="name">
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-6">
                         <label for="teacher_id">Teacher</label>
                         <select name="teacher_id" id="teacher_id" class="form-control">
+                            <option value="">Select teacher</option>
                             <?php
                             foreach ($teachers as $teacher) { ?>
                                 <option value="<?= $teacher['id']?>"><?= $teacher['name']?></option>
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="form-group col-md-2">
-                        <label for="section_id">Section</label>
-                        <select name="section_id" id="section_id" class="form-control">
-                            <?php
-                            foreach ($sections as $section) { ?>
-                                <option value="<?= $section['id']?>"><?= $section['name']?></option>
-                            <?php } ?>
-                        </select>
+                    <div class="form-group col-md-6">
+                        <label for="name">Department</label>
+                        <input readonly type="text" id="name" class="form-control bg-white" value="<?=$_GET['section']?>">
+                        <input type="hidden" name="section_id" value="<?=$section_id?>">
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-6">
                         <label for="year_id">Year</label>
+                        <?php
+                        $yearsSql = "SELECT section_years.*, years.name FROM section_years
+                            LEFT JOIN years on years.id=section_years.year_id
+                            WHERE section_years.section_id = '$section_id' GROUP BY years.id";
+                        $result = mysqli_query($conn, $yearsSql);
+                        $years = $result->fetch_all(MYSQLI_ASSOC);
+
+
+                        ?>
                         <select name="year_id" id="year_id" class="form-control">
+                            <option value="">Select year</option>
                             <?php
                             foreach ($years as $year) { ?>
                                 <option value="<?= $year['id']?>"><?= $year['name']?></option>
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="file" class="btn btn-info"><i class="fa fa-file"></i> Choose Subject File</label>
-                        <input type="file" id="file" class="d-none file" name="file">
+                    <div class="form-group col-md-6">
+                        <label for="semester">Semester</label>
+                        <select name="semester" id="semester" class="form-control">
+                            <option value="">Select semester</option>
+                            <?php
+                            foreach ($semesters as $semester) { ?>
+                                <option value="<?=$semester['name']?>"><?=$semester['name']?></option>
+                            <?php } ?>
+                        </select>
                     </div>
-
+                    <div class="form-group col-md-6">
+                        <label for="credit">Credit</label>
+                        <input type="number" id="credit" class="form-control" name="credit">
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block add_subject_button" name="submit">Add</button>
             </form>

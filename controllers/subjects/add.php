@@ -4,10 +4,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     require_once '../../connection.php';
 
     $name = $_POST['name'];
+    $semester = $_POST['semester'];
+    $credit = $_POST['credit'];
     $section_id = filter_var($_POST['section_id'], FILTER_SANITIZE_NUMBER_INT);
     $year_id = filter_var($_POST['year_id'], FILTER_SANITIZE_NUMBER_INT);
     $teacher_id = filter_var($_POST['teacher_id'], FILTER_SANITIZE_NUMBER_INT);
-    $file = $_FILES['file'];
     $error = [];
 
 
@@ -19,32 +20,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
     }
 
+    $creditArray = [0,1,2,3,4,5];
+
+    if (!in_array($credit, $creditArray)){
+        $error = "Credit must be between 0-5";
+        echo json_encode(['status' => 0, 'message' => $error]);
+        exit();
+    }
+
     if (empty($error) == false){
         echo json_encode(['status' => 0, 'message' => $error]);
     } else{
 
-        if ($file){
-            $allow_ext  = array('jpg','jpeg','png','gif', 'pdf', 'doc', 'docx');
-            $ext = explode('.', $file['name']);
-            $ext = end($ext);
-            $ext = strtolower($ext);
-            if(in_array($ext,$allow_ext)) {
-                $new_name = time().'.'.$ext;
-                move_uploaded_file($file['tmp_name'], APP.'uploads/subjects/' . $new_name);
-            } else {
-                $error[] = 'Un allowed file type';
-                echo json_encode(['status' => 0, 'message' => $error]);
-                exit();
-            }
-        }
+//        if ($file){
+//            $allow_ext  = array('jpg','jpeg','png','gif', 'pdf', 'doc', 'docx');
+//            $ext = explode('.', $file['name']);
+//            $ext = end($ext);
+//            $ext = strtolower($ext);
+//            if(in_array($ext,$allow_ext)) {
+//                $new_name = time().'.'.$ext;
+//                move_uploaded_file($file['tmp_name'], APP.'uploads/subjects/' . $new_name);
+//            } else {
+//                $error[] = 'Un allowed file type';
+//                echo json_encode(['status' => 0, 'message' => $error]);
+//                exit();
+//            }
+//        }
 
 
-        $sql = "INSERT INTO subjects SET name='$name', email='$email', password='$password', year_id = '$year_id', section_id = '$section_id'";
+        $sql = "INSERT INTO subjects SET name='$name', teacher_id='$teacher_id', semester='$semester', credit='$credit', year_id = '$year_id', section_id = '$section_id'";
         $result = mysqli_query($conn, $sql);
-        $student_id = mysqli_insert_id($conn);
-        $sql = "INSERT INTO fees SET student_id='$student_id', section_id='$section_id', fees='$fess', payed='$payed', remaining = '$remaining'";
-        $result = mysqli_query($conn, $sql);
-
         echo json_encode(['status' => 1, 'message' => 'Student added successfully']);
     }
 
