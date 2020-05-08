@@ -5,6 +5,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     $id = (int) $_POST['id'];
     $name = $_POST['name'];
+    $last_name = $_POST['last_name'];
+    $username = $_POST['username'];
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
     $phone = filter_var($_POST['phone'], FILTER_SANITIZE_NUMBER_INT);
     $password = $_POST['password'];
@@ -49,10 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
        if (empty($password) == false){
            $hashPassword = password_hash($password, CRYPT_BLOWFISH);
-           $sql = "UPDATE teachers SET name='$name', email='$email', phone='$phone', password = '$hashPassword' WHERE id ='$id'";
+           $sql = "UPDATE teachers SET name='$name', last_name = '$last_name', username = '$username', email='$email', phone='$phone', password = '$hashPassword' WHERE id ='$id'";
 
        } else {
-           $sql = "UPDATE teachers SET name='$name', email='$email', phone='$phone' WHERE id ='$id'";
+           $sql = "UPDATE teachers SET name='$name', last_name = '$last_name', username = '$username',email='$email', phone='$phone' WHERE id ='$id'";
        }
 
         $result = mysqli_query($conn, $sql);

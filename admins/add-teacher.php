@@ -75,10 +75,18 @@ $studentCount = $result->num_rows;
                         <input type="text" id="name" class="form-control" name="name">
                     </div>
                     <div class="form-group col-md-4">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" class="form-control" name="last_name">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="username">User Name</label>
+                        <input type="text" id="username" class="form-control" name="username">
+                    </div>
+                    <div class="form-group col-md-6">
                         <label for="email">E-mail</label>
                         <input type="email" id="email" class="form-control" name="email">
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         <label for="phone">Phone</label>
                         <input type="tel" id="phone" class="form-control" name="phone">
                     </div>

@@ -66,10 +66,12 @@ $teachers = $result->fetch_all(MYSQLI_ASSOC);
         <div class="col-md-12">
             <table class="table table-bordered teachers_table">
                 <thead>
-                <tr>
+                <tr class="bg-dark text-light">
                     <th>Name</th>
-                    <th>Email</th>
+                    <th>L Name</th>
+                    <th>E-mail</th>
                     <th>Phone</th>
+                    <th>User</th>
                     <th>Created at</th>
                     <th>Control</th>
                 </tr>
@@ -79,8 +81,10 @@ $teachers = $result->fetch_all(MYSQLI_ASSOC);
                     foreach ($teachers as $teacher) { ?>
                         <tr>
                             <td><?= $teacher['name']?></td>
+                            <td><?= $teacher['last_name']?></td>
                             <td><?= $teacher['email']?></td>
                             <td><?= $teacher['phone']?></td>
+                            <td><?= $teacher['username']?></td>
                             <td><?= date('Y-m-d', strtotime($teacher['created_at'])) ?></td>
                             <td>
                                 <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/teachers/delete.php?id=<?=$teacher['id']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>

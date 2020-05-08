@@ -4,6 +4,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     require_once '../../connection.php';
 
     $name = $_POST['name'];
+    $last_name = $_POST['last_name'];
+    $username = $_POST['username'];
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
     $phone = filter_var($_POST['phone'], FILTER_SANITIZE_NUMBER_INT);
     $password = $_POST['password'];
@@ -50,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
 
         $password = password_hash($password, CRYPT_BLOWFISH);
-        $sql = "INSERT INTO teachers SET name='$name', email='$email', phone='$phone', password='$password'";
+        $sql = "INSERT INTO teachers SET name='$name', last_name = '$last_name', username = '$username', email='$email', phone='$phone', password='$password'";
         $result = mysqli_query($conn, $sql);
         echo json_encode(['status' => 1, 'message' => 'Teacher added successfully']);
     }
