@@ -14,9 +14,17 @@ include('layout/sidebar.php');
 
 include('layout/topnav.php');
 
-$sql = "SELECT * FROM students";
+$year_id=@$_GET['year_id'];
+$section_id=@$_GET['section_id'];
+
+$sql = "SELECT subjects.*, years.name AS YNAME, teachers.name AS TNAME, sections.name AS SNAME
+        FROM subjects LEFT JOIN years ON years.id=subjects.year_id 
+        LEFT JOIN teachers ON teachers.id=subjects.teacher_id 
+        LEFT JOIN sections ON sections.id=subjects.section_id 
+        WHERE subjects.year_id = '$year_id' AND subjects.section_id = '$section_id'";
+
 $result = mysqli_query($conn, $sql);
-$students = $result->fetch_all(MYSQLI_ASSOC);
+$subjects = $result->fetch_all(MYSQLI_ASSOC);
 
 ?>
 
@@ -55,7 +63,7 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
 <div class="container-fluid">
     <!-- Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">list of students</h1>
+        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">list of subjects</h1>
     </div>
 
     <div class="row">
@@ -66,35 +74,35 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
         <div class="col-md-12">
             <table class="table table-bordered students_table">
                 <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Created at</th>
+                <tr class="bg-dark text-light">
+                    <th>ID</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Department</th>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th>Credit</th>
                     <th>Control</th>
                 </tr>
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($students as $student) { ?>
+                    foreach ($subjects as $subject) { ?>
                         <tr>
-                            <td><?= $student['name']?></td>
-                            <td><?= $student['email']?></td>
-                            <td><?= date('Y-m-d', strtotime($student['created_at'])) ?></td>
+                            <td><?= $subject['id']?></td>
+                            <td><?= $subject['name']?></td>
+                            <td><?= $subject['TNAME']?></td>
+                            <td><?= $subject['SNAME']?></td>
+                            <td><?= $subject['YNAME']?></td>
+                            <td><?= $subject['semester']?></td>
+                            <td><?= $subject['credit']?></td>
                             <td>
-                                <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/students/delete.php?id=<?=$student['id']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
-                                <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/students/get_info.php?id=<?=$student['id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
+                                <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/subjects/delete.php?id=<?=$subject['id']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
+                                <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/subjects/get_info.php?id=<?=$subject['id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
                             </td>
                         </tr>
                     <?php } ?>
                 </tbody>
-                <tfoot>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Created at</th>
-                    <th>Control</th>
-                </tr>
-                </tfoot>
             </table>
         </div>
     </div>
@@ -114,7 +122,7 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
             <div class="modal-body">
                 <div class="alert alert-danger d-none error_message text-center"></div>
                 <div class="alert alert-success d-none success_message text-center"></div>
-                <form class="edit_teacher_form" action="<?=APP?>/controllers/students/edit.php" method="post"></form>
+                <form class="edit_teacher_form" action="<?=APP?>/controllers/subjects/edit.php" method="post"></form>
             </div>
             <div class="modal-footer">
                 <a class="btn btn-success btn-block do_edit_teacher_link" href="#">Edit</a>
