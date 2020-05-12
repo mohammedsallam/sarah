@@ -61,11 +61,11 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
           Teachers
       </div>
       <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProfi" aria-expanded="true" aria-controls="collapseProfi">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#teacher" aria-expanded="true" aria-controls="collapseProfi">
               <i class="fas fa-fw fa-cog"></i>
               <span>Teachers</span>
           </a>
-          <div id="collapseProfi" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div id="teacher" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
               <div class="bg-white py-2 collapse-inner rounded">
                   <a class="collapse-item" href="<?=APP?>/admins/add-teacher.php">Add Teacher</a>
                   <a class="collapse-item" href="<?=APP?>/admins/all-teacher.php">Teachers</a>
@@ -107,6 +107,41 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
       <?php  } ?>
       <!-- END SUBJECTS -->
 
+
+      <!-- START FILES -->
+          <hr class="sidebar-divider">
+          <li class="sidebar-heading">
+              files
+          </li>
+          <?php
+
+          foreach ($sections as $section) { ?>
+              <li class="nav-item">
+                  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#file_<?=$section['id']?>" aria-expanded="true" aria-controls="collapse">
+                      <i class="fas fa-fw fa-cog"></i>
+                      <span><?=$section['name']?></span>
+                  </a>
+                  <div id="file_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                      <div class="bg-white py-2 collapse-inner rounded">
+                          <a class="collapse-item" href="<?=APP?>/admins/add-file.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add File</a>
+                          <?php
+                          $id = $section['id'];
+                          $yearsSql = "SELECT section_years.*, years.name FROM section_years 
+                        LEFT JOIN years on years.id=section_years.year_id 
+                        WHERE section_years.section_id = '$id' GROUP BY years.id";
+                          $result = mysqli_query($conn, $yearsSql);
+                          $years = $result->fetch_all(MYSQLI_ASSOC);
+                          foreach ($years as $year) { ?>
+                              <a class="collapse-item" href="<?=APP?>/admins/all-file.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
+                          <?php } ?>
+
+                      </div>
+                  </div>
+              </li>
+          <?php  } ?>
+      <!-- END FILES -->
+
+
       <!-- Start Sections -->
       <hr class="sidebar-divider">
 
@@ -117,7 +152,7 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
 
       <!-- Nav Item - TEACHERS -->
       <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#section" aria-expanded="true" aria-controls="collapseProfi">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#section" aria-expanded="true" aria-controls="collapse">
               <i class="fas fa-fw fa-cog"></i>
               <span>Sections</span>
           </a>
@@ -140,7 +175,7 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
       </div>
 
       <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#year" aria-expanded="true" aria-controls="collapseProfi">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#year" aria-expanded="true" aria-controls="collapse">
               <i class="fas fa-fw fa-cog"></i>
               <span>Years</span>
           </a>
@@ -163,7 +198,7 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
       </div>
 
       <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#semester" aria-expanded="true" aria-controls="collapseProfi">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#semester" aria-expanded="true" aria-controls="collapse">
               <i class="fas fa-fw fa-cog"></i>
               <span>Semester</span>
           </a>
@@ -186,7 +221,7 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
       </div>
 
       <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#subject" aria-expanded="true" aria-controls="collapseProfi">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#subject" aria-expanded="true" aria-controls="collapse">
               <i class="fas fa-fw fa-cog"></i>
               <span>Subjects</span>
           </a>
@@ -209,7 +244,7 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
       </div>
 
       <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#exam" aria-expanded="true" aria-controls="collapseProfi">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#exam" aria-expanded="true" aria-controls="collapse">
               <i class="fas fa-fw fa-cog"></i>
               <span>Exams</span>
           </a>

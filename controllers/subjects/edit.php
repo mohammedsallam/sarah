@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         $sql = "UPDATE subjects SET name='$name', year_id='$year_id', teacher_id='$teacher_id', section_id ='$section_id', credit ='$credit', semester='$semester' WHERE id ='$id'";
         $result = mysqli_query($conn, $sql);
-       
+
         echo json_encode(['status' => 1, 'message' => 'Subject Updated successfully']);
     }
 
