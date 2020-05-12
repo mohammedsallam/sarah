@@ -66,8 +66,8 @@ $years = $result->fetch_all(MYSQLI_ASSOC);
         <div class="col-md-12">
             <table class="table table-bordered years_table">
                 <thead>
-                <tr class="text-center">
-                    <th>#</th>
+                <tr class="bg-dark text-light text-center">
+                    <th>ID</th>
                     <th>Name</th>
                     <th>Control</th>
                 </tr>
@@ -85,13 +85,6 @@ $years = $result->fetch_all(MYSQLI_ASSOC);
                     </tr>
                 <?php } ?>
                 </tbody>
-                <tfoot>
-                <tr class="text-center">
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Control</th>
-                </tr>
-                </tfoot>
             </table>
         </div>
     </div>
