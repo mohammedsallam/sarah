@@ -115,7 +115,7 @@ $years = $result->fetch_all(MYSQLI_ASSOC);
 
             $('.add_section_form input').each(function () {
                 if ($(this).val() === ''){
-                    // error.push(true);
+                    error.push(true);
                     $(this).css({
                         border: '1px solid red',
                     });

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 11, 2020 at 02:40 AM
+-- Generation Time: May 12, 2020 at 08:11 AM
 -- Server version: 10.1.32-MariaDB
 -- PHP Version: 7.2.5
 
@@ -233,21 +233,26 @@ CREATE TABLE `subjects` (
 --
 
 INSERT INTO `subjects` (`id`, `name`, `year_id`, `teacher_id`, `section_id`, `credit`, `semester`) VALUES
-(1, 'علوم ', 1, 3, 9, '2', 'first semester'),
-(2, 'رياضيات', 1, 1, 9, '2', 'first semester'),
-(3, 'ghjghjghj', 59, 1, 9, '2', 'first semester'),
-(4, 'ghjghjghj', 59, 1, 9, '2', 'first semester'),
-(5, 'ghjghjghj', 59, 1, 9, '2', 'first semester'),
-(6, 'ghjghjghj', 59, 1, 9, '2', 'first semester'),
-(7, 'ghjghjghj', 59, 1, 9, '2', 'first semester'),
-(8, 'ghjghjghj', 59, 1, 9, '2', 'first semester'),
-(9, 'ghjghjghj', 59, 1, 9, '2', 'first semester'),
-(10, 'ghjghjghj', 59, 3, 9, '2', 'first semester'),
-(11, 'ghjghjghj', 61, 3, 9, '2', 'first semester'),
-(12, 'ghjghjghj', 61, 3, 9, '2', 'second semester'),
-(13, 'ghjghjghj', 62, 4, 9, '2', 'second semester'),
-(14, 'ttyutyuytu', 64, 1, 10, '2', 'first semester'),
-(15, 'ttyutyuytu', 64, 1, 10, '2', 'first semester');
+(18, 'علوم السنة الأولى', 1, 1, 9, '3', 'first semester'),
+(19, 'علوم السنة الاولى', 1, 1, 9, '3', 'second semester'),
+(20, 'علوم السنة الثانية', 2, 2, 9, '3', 'first semester'),
+(21, 'علوم السنة الثانية', 2, 2, 9, '3', 'second semester'),
+(22, 'علوم السنة الثالثة', 3, 3, 9, '3', 'first semester'),
+(23, 'علوم السنة الثالثة', 3, 3, 9, '3', 'second semester'),
+(24, 'علوم السنة الرابعة', 4, 4, 9, '3', 'first semester'),
+(25, 'علوم السنة الرابعة', 4, 4, 9, '3', 'second semester'),
+(26, 'منتبنس', 1, 1, 10, '1', 'first semester'),
+(27, 'قثفثقفصق', 1, 1, 10, '1', 'second semester'),
+(28, 'ثفثقفثقؤرءر', 2, 1, 10, '1', 'second semester'),
+(29, 'ثفثقفثقؤرءر', 2, 1, 10, '1', 'first semester'),
+(30, 'بايليبلبيل', 3, 1, 10, '1', 'first semester'),
+(31, 'بايليبلبيل', 3, 1, 10, '1', 'second semester'),
+(32, 'بيل6غ545', 1, 3, 11, '2', 'first semester'),
+(33, 'بيل6غ545', 1, 3, 11, '2', 'second semester'),
+(34, 'لاباسيبيب', 2, 3, 11, '2', 'second semester'),
+(35, 'لاباسيبيب', 2, 3, 11, '2', 'first semester'),
+(36, 'يبلرلاسيبسيب', 3, 4, 11, '2', 'first semester'),
+(37, 'يبلرلاسيبسيب', 3, 4, 11, '2', 'second semester');
 
 -- --------------------------------------------------------
 
@@ -258,11 +263,29 @@ INSERT INTO `subjects` (`id`, `name`, `year_id`, `teacher_id`, `section_id`, `cr
 CREATE TABLE `subject_files` (
   `id` int(11) NOT NULL,
   `file` varchar(200) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
   `subject_id` int(11) DEFAULT NULL,
   `section_id` int(11) DEFAULT NULL,
   `teacher_id` int(11) DEFAULT NULL,
-  `year_id` int(11) DEFAULT NULL
+  `year_id` int(11) DEFAULT NULL,
+  `semester` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `subject_files`
+--
+
+INSERT INTO `subject_files` (`id`, `file`, `name`, `subject_id`, `section_id`, `teacher_id`, `year_id`, `semester`) VALUES
+(18, '/uploads/subjects/1589263109.pdf', 'الملف الأول', 18, 9, NULL, 1, 'first semester'),
+(19, '/uploads/subjects/1589256996.pdf', 'شسييش4فمات', 20, 9, NULL, 2, 'first semester'),
+(20, '/uploads/subjects/1589257006.pdf', 'شسييش4فمات', 25, 9, NULL, 4, 'second semester'),
+(22, '/uploads/subjects/1589257038.pdf', 'يبلبيلالناتت', 30, 10, NULL, 3, 'first semester'),
+(23, '/uploads/subjects/1589257042.pdf', 'يبلبيلالناتت', 31, 10, NULL, 3, 'second semester'),
+(24, '/uploads/subjects/1589257058.pdf', 'لاتلاتيبليل', 36, 11, NULL, 3, 'first semester'),
+(25, '/uploads/subjects/1589257064.pdf', 'سششسيرىتالات', 37, 11, NULL, 3, 'second semester'),
+(26, '/uploads/subjects/1589257069.pdf', 'بلاصقصثقصقث', 33, 11, NULL, 1, 'second semester'),
+(27, '/uploads/subjects/1589257091.pdf', 'لابيل43345', 37, 11, NULL, 3, 'second semester'),
+(28, '/uploads/subjects/1589257101.pdf', 'بيليبصثصثق', 35, 11, NULL, 2, 'first semester');
 
 -- --------------------------------------------------------
 
@@ -367,6 +390,12 @@ ALTER TABLE `subjects`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `subject_files`
+--
+ALTER TABLE `subject_files`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `teachers`
 --
 ALTER TABLE `teachers`
@@ -428,7 +457,13 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `subjects`
 --
 ALTER TABLE `subjects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT for table `subject_files`
+--
+ALTER TABLE `subject_files`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `teachers`

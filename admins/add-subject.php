@@ -159,7 +159,7 @@ $section_id = $_GET['section_id'];
 
             $('.add_subject_form input, select').each(function () {
                 if ($(this).val() === ''){
-                    // error.push(true);
+                    error.push(true);
                     $(this).css({
                         border: '1px solid red'
                     });

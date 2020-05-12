@@ -131,20 +131,6 @@ $years = $result->fetch_all(MYSQLI_ASSOC);
                         <label for="confirm_password">Confirm Password</label>
                         <input type="password" id="confirm_password" class="form-control" name="confirm_password">
                     </div>
-<!--                    <div class="form-group col-md-2">-->
-<!--                        <label for="fees">Fees</label>-->
-<!--                        <input type="number" id="fees" class="form-control" name="fees" min="0">-->
-<!--                    </div>-->
-<!--                    <div class="form-group col-md-2">-->
-<!--                        <label for="payed">Payed fees</label>-->
-<!--                        <input type="number" id="payed" class="form-control" name="payed" min="0">-->
-<!--                    </div>-->
-<!--                    <div class="form-group col-md-2">-->
-<!--                        <label for="phone">Remaining fees</label>-->
-<!--                        <input type="number" id="remaining" class="form-control" name="remaining" min="0">-->
-<!--                    </div>-->
-
-
                 </div>
                 <button type="submit" class="btn btn-primary btn-block add_teacher_button" name="submit">Add</button>
             </form>
