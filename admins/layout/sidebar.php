@@ -5,8 +5,6 @@ $sectionsSql = "SELECT  sections.* FROM sections
 $result = mysqli_query($conn, $sectionsSql);
 $sections = $result->fetch_all(MYSQLI_ASSOC);
 
-
-
 ?>
 
 <!-- Page Wrapper -->
