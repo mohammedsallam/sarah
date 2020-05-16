@@ -139,11 +139,78 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
           <?php  } ?>
       <!-- END FILES -->
 
+      <!-- START SCHEDULE -->
+      <hr class="sidebar-divider">
+      <li class="sidebar-heading">
+          schedule
+      </li>
+      <?php
+
+      foreach ($sections as $section) { ?>
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#schedule_<?=$section['id']?>" aria-expanded="true" aria-controls="collapse">
+                  <i class="fas fa-fw fa-cog"></i>
+                  <span><?=$section['name']?></span>
+              </a>
+              <div id="schedule_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                  <div class="bg-white py-2 collapse-inner rounded">
+                      <a class="collapse-item" href="<?=APP?>/admins/add-schedule.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Schedule</a>
+                      <?php
+                      $id = $section['id'];
+                      $yearsSql = "SELECT section_years.*, years.name FROM section_years 
+                    LEFT JOIN years on years.id=section_years.year_id 
+                    WHERE section_years.section_id = '$id' GROUP BY years.id";
+                      $result = mysqli_query($conn, $yearsSql);
+                      $years = $result->fetch_all(MYSQLI_ASSOC);
+                      foreach ($years as $year) { ?>
+                          <a class="collapse-item" href="<?=APP?>/admins/all-schedule.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
+                      <?php } ?>
+
+                  </div>
+              </div>
+          </li>
+      <?php  } ?>
+      <!-- END SCHEDULE -->
+
+
+          <!-- START EXAM SCHEDULE -->
+          <hr class="sidebar-divider">
+          <li class="sidebar-heading">
+              exam schedule
+          </li>
+          <?php
+
+          foreach ($sections as $section) { ?>
+              <li class="nav-item">
+                  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#exam_schedule_<?=$section['id']?>" aria-expanded="true" aria-controls="collapse">
+                      <i class="fas fa-fw fa-cog"></i>
+                      <span><?=$section['name']?></span>
+                  </a>
+                  <div id="exam_schedule_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                      <div class="bg-white py-2 collapse-inner rounded">
+                          <a class="collapse-item" href="<?=APP?>/admins/add-exam-schedule.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Exam Schedule</a>
+                          <?php
+                          $id = $section['id'];
+                          $yearsSql = "SELECT section_years.*, years.name FROM section_years 
+                    LEFT JOIN years on years.id=section_years.year_id 
+                    WHERE section_years.section_id = '$id' GROUP BY years.id";
+                          $result = mysqli_query($conn, $yearsSql);
+                          $years = $result->fetch_all(MYSQLI_ASSOC);
+                          foreach ($years as $year) { ?>
+                              <a class="collapse-item" href="<?=APP?>/admins/all-schedule.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
+                          <?php } ?>
+
+                      </div>
+                  </div>
+              </li>
+          <?php  } ?>
+          <!-- END EXAM SCHEDULE -->
+
 
       <!-- Start Sections -->
       <hr class="sidebar-divider">
 
-      <!-- TEACHER Heading -->
+      <!-- TEACHER Hea  ding -->
       <div class="sidebar-heading">
           Sections
       </div>
@@ -191,6 +258,8 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
       <hr class="sidebar-divider">
 
       <!-- TEACHER Heading -->
+
+
       <div class="sidebar-heading">
           Semester
       </div>

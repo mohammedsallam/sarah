@@ -1,3 +1,12 @@
+<?php
+
+$sectionsSql = "SELECT  sections.* FROM sections 
+                    LEFT JOIN section_years on sections.id=section_years.section_id GROUP BY sections.id";
+$result = mysqli_query($conn, $sectionsSql);
+$sections = $result->fetch_all(MYSQLI_ASSOC);
+
+?>
+
 <!-- Page Wrapper -->
 <div id="wrapper">
       
@@ -11,364 +20,265 @@
           </div>
           <div class="sidebar-brand-text mx-3"></div>
         </a>
-  
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Students S.E.I
-        </div>
-  
-        <!-- Nav Item - A.I.A -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>A.I.A</span>
-          </a>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="../controllers/add_student_aia.php">Add student</a>
-              <a class="collapse-item" href="../controllers/students_aia.php">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-              <a class="collapse-item" href="#">Year IV</a>
-            </div>
-          </div>
-        </li>
-  
-        <!-- Nav Item - Industrial Engineering -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Industrial Engineering</span>
-          </a>
-          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="adauga_student_info.php">Add student</a>
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
-          </div>
-        </li>
-  
-        <!-- Nav Item - Computer Science -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Computer Science</span>
-          </a>
-          <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Add student</a>
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
-          </div>
-        </li>
-  
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-        Teachers
-        </div>
-  
-        <!-- Nav Item - A.I.A -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProfi" aria-expanded="true" aria-controls="collapseProfi">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Teachers</span>
-          </a>
-          <div id="collapseProfi" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Add Teacher</a>
-              <a class="collapse-item" href="#">Teachers</a>
-            </div>
-          </div>
-        </li>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Courses & Marks
-        </div>
-  
-        <!-- Nav Item - A.I.A -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCourses" aria-expanded="true" aria-controls="collapseCourses">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>A.I.A</span>
-          </a>
-          <div id="collapseCourses" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Add course</a>
-              <a class="collapse-item" href="#">Anul I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-              <a class="collapse-item" href="#">Year IV</a>
-            </div>
-          </div>
-        </li>
+      <!-- START STUDENTS -->
+      <hr class="sidebar-divider">
+      <li class="sidebar-heading">
+          Students
+      </li>
+      <?php
 
-        <!-- Nav Item - Industrial Engineering -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCourses2" aria-expanded="true" aria-controls="collapseCourses2">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Industrial Engineering</span>
-          </a>
-          <div id="collapseCourses2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Add Course</a>
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
-          </div>
-        </li>
+      foreach ($sections as $section) { ?>
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#student_<?=$section['id']?>" aria-expanded="true" aria-controls="collapseProfi">
+                  <i class="fas fa-fw fa-cog"></i>
+                  <span><?=$section['name']?></span>
+              </a>
+              <div id="student_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                  <div class="bg-white py-2 collapse-inner rounded">
+                      <a class="collapse-item" href="<?=APP?>/admins/add-student.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Student</a>
+                      <?php
+                      $id = $section['id'];
+                      $yearsSql = "SELECT section_years.*, years.name FROM section_years 
+                        LEFT JOIN years on years.id=section_years.year_id 
+                        WHERE section_years.section_id = '$id' GROUP BY years.id";
+                      $result = mysqli_query($conn, $yearsSql);
+                      $years = $result->fetch_all(MYSQLI_ASSOC);
+                      foreach ($years as $year) { ?>
+                          <a class="collapse-item" href="<?=APP?>/admins/all-student.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
+                      <?php } ?>
 
-        <!-- Nav Item - Computer Science -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCourses3" aria-expanded="true" aria-controls="collapseCourses3">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Computer Science</span>
+                  </div>
+              </div>
+          </li>
+      <?php  } ?>
+      <!-- END STUDENTS -->
+
+      <!-- START TEACHERS -->
+      <div class="sidebar-heading">
+          Teachers
+      </div>
+      <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#teacher" aria-expanded="true" aria-controls="collapseProfi">
+              <i class="fas fa-fw fa-cog"></i>
+              <span>Teachers</span>
           </a>
-          <div id="collapseCourses3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Add Course</a>
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
+          <div id="teacher" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                  <a class="collapse-item" href="<?=APP?>/admins/add-teacher.php">Add Teacher</a>
+                  <a class="collapse-item" href="<?=APP?>/admins/all-teacher.php">Teachers</a>
+              </div>
           </div>
-        </li>
+      </li>
+      <!-- END TEACHERS -->
+
+      <!-- START SUBJECTS -->
+      <hr class="sidebar-divider">
+      <li class="sidebar-heading">
+          Subjects
+      </li>
+      <?php
+
+      foreach ($sections as $section) { ?>
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#subject_<?=$section['id']?>" aria-expanded="true" aria-controls="collapseProfi">
+                  <i class="fas fa-fw fa-cog"></i>
+                  <span><?=$section['name']?></span>
+              </a>
+              <div id="subject_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                  <div class="bg-white py-2 collapse-inner rounded">
+                      <a class="collapse-item" href="<?=APP?>/admins/add-subject.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Subject</a>
+                      <?php
+                      $id = $section['id'];
+                      $yearsSql = "SELECT section_years.*, years.name FROM section_years 
+                    LEFT JOIN years on years.id=section_years.year_id 
+                    WHERE section_years.section_id = '$id' GROUP BY years.id";
+                      $result = mysqli_query($conn, $yearsSql);
+                      $years = $result->fetch_all(MYSQLI_ASSOC);
+                      foreach ($years as $year) { ?>
+                          <a class="collapse-item" href="<?=APP?>/admins/all-subject.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
+                      <?php } ?>
+
+                  </div>
+              </div>
+          </li>
+      <?php  } ?>
+      <!-- END SUBJECTS -->
 
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-        Fees
-        </div>
-  
-        <!-- Nav Item - A.I.A -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFee" aria-expanded="true" aria-controls="collapseFee">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>A.I.A</span>
+      <!-- START FILES -->
+          <hr class="sidebar-divider">
+          <li class="sidebar-heading">
+              files
+          </li>
+          <?php
+
+          foreach ($sections as $section) { ?>
+              <li class="nav-item">
+                  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#file_<?=$section['id']?>" aria-expanded="true" aria-controls="collapse">
+                      <i class="fas fa-fw fa-cog"></i>
+                      <span><?=$section['name']?></span>
+                  </a>
+                  <div id="file_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                      <div class="bg-white py-2 collapse-inner rounded">
+                          <a class="collapse-item" href="<?=APP?>/admins/add-file.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add File</a>
+                          <?php
+                          $id = $section['id'];
+                          $yearsSql = "SELECT section_years.*, years.name FROM section_years 
+                        LEFT JOIN years on years.id=section_years.year_id 
+                        WHERE section_years.section_id = '$id' GROUP BY years.id";
+                          $result = mysqli_query($conn, $yearsSql);
+                          $years = $result->fetch_all(MYSQLI_ASSOC);
+                          foreach ($years as $year) { ?>
+                              <a class="collapse-item" href="<?=APP?>/admins/all-file.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
+                          <?php } ?>
+
+                      </div>
+                  </div>
+              </li>
+          <?php  } ?>
+      <!-- END FILES -->
+
+      <!-- START SCHEDULE -->
+      <hr class="sidebar-divider">
+      <li class="sidebar-heading">
+          schedule
+      </li>
+      <?php
+
+      foreach ($sections as $section) { ?>
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#schedule_<?=$section['id']?>" aria-expanded="true" aria-controls="collapse">
+                  <i class="fas fa-fw fa-cog"></i>
+                  <span><?=$section['name']?></span>
+              </a>
+              <div id="schedule_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                  <div class="bg-white py-2 collapse-inner rounded">
+                      <a class="collapse-item" href="<?=APP?>/admins/add-schedule.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Schedule</a>
+                      <?php
+                      $id = $section['id'];
+                      $yearsSql = "SELECT section_years.*, years.name FROM section_years 
+                    LEFT JOIN years on years.id=section_years.year_id 
+                    WHERE section_years.section_id = '$id' GROUP BY years.id";
+                      $result = mysqli_query($conn, $yearsSql);
+                      $years = $result->fetch_all(MYSQLI_ASSOC);
+                      foreach ($years as $year) { ?>
+                          <a class="collapse-item" href="<?=APP?>/admins/all-schedule.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
+                      <?php } ?>
+
+                  </div>
+              </div>
+          </li>
+      <?php  } ?>
+      <!-- END SCHEDULE -->
+
+
+          <!-- START EXAM SCHEDULE -->
+          <hr class="sidebar-divider">
+          <li class="sidebar-heading">
+              exam schedule
+          </li>
+          <?php
+
+          foreach ($sections as $section) { ?>
+              <li class="nav-item">
+                  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#exam_schedule_<?=$section['id']?>" aria-expanded="true" aria-controls="collapse">
+                      <i class="fas fa-fw fa-cog"></i>
+                      <span><?=$section['name']?></span>
+                  </a>
+                  <div id="exam_schedule_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                      <div class="bg-white py-2 collapse-inner rounded">
+                          <a class="collapse-item" href="<?=APP?>/admins/add-exam-schedule.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Exam Schedule</a>
+                          <?php
+                          $id = $section['id'];
+                          $yearsSql = "SELECT section_years.*, years.name FROM section_years 
+                    LEFT JOIN years on years.id=section_years.year_id 
+                    WHERE section_years.section_id = '$id' GROUP BY years.id";
+                          $result = mysqli_query($conn, $yearsSql);
+                          $years = $result->fetch_all(MYSQLI_ASSOC);
+                          foreach ($years as $year) { ?>
+                              <a class="collapse-item" href="<?=APP?>/admins/all-schedule.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
+                          <?php } ?>
+
+                      </div>
+                  </div>
+              </li>
+          <?php  } ?>
+          <!-- END EXAM SCHEDULE -->
+
+
+      <!-- Start Sections -->
+      <hr class="sidebar-divider">
+
+      <!-- TEACHER Hea  ding -->
+      <div class="sidebar-heading">
+          Sections
+      </div>
+
+      <!-- Nav Item - TEACHERS -->
+      <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#section" aria-expanded="true" aria-controls="collapse">
+              <i class="fas fa-fw fa-cog"></i>
+              <span>Sections</span>
           </a>
-          <div id="collapseFee" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-              <a class="collapse-item" href="#">Year IV</a>
-            </div>
+          <div id="section" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                  <a class="collapse-item" href="<?=APP?>/admins/add-section.php">Add Section</a>
+                  <a class="collapse-item" href="<?=APP?>/admins/all-section.php">Sections</a>
+              </div>
           </div>
-        </li>
+      </li>
 
-        <!-- Nav Item - Industrial Engineering -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFee2" aria-expanded="true" aria-controls="collapseFee2">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Industrial Engineering</span>
+      <!-- End Sections -->
+
+      <!-- Start years -->
+      <hr class="sidebar-divider">
+
+      <!-- TEACHER Heading -->
+      <div class="sidebar-heading">
+          years
+      </div>
+
+      <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#year" aria-expanded="true" aria-controls="collapse">
+              <i class="fas fa-fw fa-cog"></i>
+              <span>Years</span>
           </a>
-          <div id="collapseFee2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
+          <div id="year" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                  <a class="collapse-item" href="<?=APP?>/admins/add-year.php">Add Year</a>
+                  <a class="collapse-item" href="<?=APP?>/admins/all-year.php">years</a>
+              </div>
           </div>
-        </li>
+      </li>
 
-        <!-- Nav Item - Computer Science -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFee3" aria-expanded="true" aria-controls="collapseFee3">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Computer Science</span>
+      <!-- End years -->
+
+      <!-- Start semesters -->
+      <hr class="sidebar-divider">
+
+      <!-- TEACHER Heading -->
+
+
+      <div class="sidebar-heading">
+          Semester
+      </div>
+
+      <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#semester" aria-expanded="true" aria-controls="collapse">
+              <i class="fas fa-fw fa-cog"></i>
+              <span>Semester</span>
           </a>
-          <div id="collapseFee3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
+          <div id="semester" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                  <a class="collapse-item" href="<?=APP?>/admins/add-semester.php">Add Semester</a>
+                  <a class="collapse-item" href="<?=APP?>/admins/all-semester.php">Semester</a>
+              </div>
           </div>
-        </li>
+      </li>
 
+      <!-- End semesters -->
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Files
-        </div>
-  
-        <!-- Nav Item - A.I.A -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFiles" aria-expanded="true" aria-controls="collapseFiles">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>A.I.A</span>
-          </a>
-          <div id="collapseFiles" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-              <a class="collapse-item" href="#">Year IV</a>
-            </div>
-          </div>
-        </li>
-
-        <!-- Nav Item - Industrial Engineering -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFiles2" aria-expanded="true" aria-controls="collapseFiles2">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Industrial Engineering</span>
-          </a>
-          <div id="collapseFiles2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
-          </div>
-        </li>
-
-        <!-- Nav Item - Computer Science -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFiles3" aria-expanded="true" aria-controls="collapseFiles3">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Computer Science</span>
-          </a>
-          <div id="collapseFiles3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
-          </div>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-        Schedule
-        </div>
-  
-        <!-- Nav Item - A.I.A -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSchedule" aria-expanded="true" aria-controls="collapseSchedule">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>A.I.A</span>
-          </a>
-          <div id="collapseSchedule" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I </a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-              <a class="collapse-item" href="#">Year IV</a>
-            </div>
-          </div>
-        </li>
-
-        <!-- Nav Item - Industrial Engineering -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSchedule2" aria-expanded="true" aria-controls="collapseSchedule2">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Industrial Engineering</span>
-          </a>
-          <div id="collapseSchedule2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
-          </div>
-        </li>
-
-        <!-- Nav Item - Computer Science -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSchedule3" aria-expanded="true" aria-controls="collapseSchedule3">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Computer Science</span>
-          </a>
-          <div id="collapseSchedule3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
-          </div>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Exams
-        </div>
-  
-        <!-- Nav Item - A.I.A -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExams" aria-expanded="true" aria-controls="collapseExams">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>A.I.A</span>
-          </a>
-          <div id="collapseExams" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-              <a class="collapse-item" href="#">Year IV</a>
-            </div>
-          </div>
-        </li>
-
-        <!-- Nav Item - Industrial Engineering -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExams2" aria-expanded="true" aria-controls="collapseExams2">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Industrial Engineering</span>
-          </a>
-          <div id="collapseExams2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
-          </div>
-        </li>
-
-        <!-- Nav Item - Computer Science -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExams3" aria-expanded="true" aria-controls="collapseExams3">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Computer Science</span>
-          </a>
-          <div id="collapseExams3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="#">Year I</a>
-              <a class="collapse-item" href="#">Year II</a>
-              <a class="collapse-item" href="#">Year III</a>
-            </div>
-          </div>
-        </li>
-
-     
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
   

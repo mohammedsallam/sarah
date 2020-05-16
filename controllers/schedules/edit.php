@@ -48,14 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $mime = mime_content_type($file['tmp_name']);
 
             if (!in_array($mime, $allow_file)){
-                $error = 'Un allowed file type';
+                $error = 'Un allowed file type please choose PDF file';
                 echo json_encode(['status' => 0, 'message' => $error]);
                 exit();
             }
 
             if(in_array($ext,$allow_ext)) {
                 $new_name = time().'.'.$ext;
-                $path = '/uploads/subjects/' . $new_name;
+                $path = '/uploads/schedules/' . $new_name;
                 move_uploaded_file($file['tmp_name'], APP_DIR.$path);
 
             } else {
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 exit();
             }
 
-            $sql = "UPDATE subject_files SET name='$name', file='$path' WHERE id='$id'";
+            $sql = "UPDATE schedules SET name='$name', file='$path' WHERE id='$id'";
 
 
             if (file_exists(APP_DIR.$old_file)){
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             }
 
         } else {
-            $sql = "UPDATE subject_files SET name='$name' WHERE id='$id'";
+            $sql = "UPDATE schedules SET name='$name' WHERE id='$id'";
         }
         $result = mysqli_query($conn, $sql);
         echo json_encode(['status' => 1, 'message' => 'File Updated successfully']);

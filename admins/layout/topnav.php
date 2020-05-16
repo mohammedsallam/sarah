@@ -17,7 +17,7 @@
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?=$_SESSION['name']?></span>
-        <img class="img-profile rounded-circle" src="https://cdn.pixabay.com/photo/2016/08/31/11/54/user-1633249_960_720.png">
+        <img class="img-profile rounded-circle" src="<?=APP.'/uploads/user.webp'?>">
       </a>
       <!-- Dropdown - User Information -->
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

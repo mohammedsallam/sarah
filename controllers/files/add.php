@@ -27,19 +27,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $path = '';
 
         $allow_file  = [
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'application/vnd.ms-powerpoint',
-            'application/x-msaccess',
+//            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+//            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+//            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+//            'application/vnd.ms-powerpoint',
+//            'application/x-msaccess',
             'application/pdf',
-            'image/jpeg',
-            'image/png',
-            'image/gif',
+//            'image/jpeg',
+//            'image/png',
+//            'image/gif',
         ];
 
         if ($file['name'] !=  ''){
-            $allow_ext  = array('jpg','jpeg','png','gif', 'pdf', 'doc', 'docx', 'ppt','pptx', 'accdb', 'xlsx');
+//            $allow_ext  = array('jpg','jpeg','png','gif', 'pdf', 'doc', 'docx', 'ppt','pptx', 'accdb', 'xlsx');
+            $allow_ext  = array('pdf');
             $ext = explode('.', $file['name']);
             $ext = end($ext);
             $ext = strtolower($ext);

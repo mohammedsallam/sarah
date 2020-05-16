@@ -2,10 +2,11 @@
 ob_start();
 session_start();
 
-if (!isset($_SESSION['sign_type'])){
-    header('location: login.php');
+if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 1){
+    header("location: ../login.php");
     exit();
 }
+
 require('../connection.php');
 
 include('../layout/header.php');

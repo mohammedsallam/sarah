@@ -3,10 +3,11 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     require_once '../../connection.php';
 
-    $id = (int) $_POST['id'];
     $name = $_POST['name'];
+    $section_id = filter_var($_POST['section_id'], FILTER_SANITIZE_NUMBER_INT);
+    $year_id = filter_var($_POST['year_id'], FILTER_SANITIZE_NUMBER_INT);
+    $semester = $_POST['semester'];
     $file = $_FILES['file'];
-    $old_file = $_POST['old_file'];
     $error = [];
 
     foreach ($_POST as $key => $item) {
@@ -22,31 +23,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         echo json_encode(['status' => 0, 'message' => $error]);
     } else{
 
-
-
         $path = '';
 
         $allow_file  = [
-//            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-//            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-//            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-//            'application/vnd.ms-powerpoint',
-//            'application/x-msaccess',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/vnd.ms-powerpoint',
+            'application/x-msaccess',
             'application/pdf',
-//            'image/jpeg',
-//            'image/png',
-//            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/gif',
         ];
 
         if ($file['name'] !=  ''){
-            $sql = '';
-//            $allow_ext  = array('jpg','jpeg','png','gif', 'pdf', 'doc', 'docx', 'ppt','pptx', 'accdb', 'xlsx');
-            $allow_ext  = array('pdf');
+            $allow_ext  = array('jpg','jpeg','png','gif', 'pdf', 'doc', 'docx', 'ppt','pptx', 'accdb', 'xlsx');
             $ext = explode('.', $file['name']);
             $ext = end($ext);
             $ext = strtolower($ext);
             $mime = mime_content_type($file['tmp_name']);
-
             if (!in_array($mime, $allow_file)){
                 $error = 'Un allowed file type';
                 echo json_encode(['status' => 0, 'message' => $error]);
@@ -55,27 +51,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             if(in_array($ext,$allow_ext)) {
                 $new_name = time().'.'.$ext;
-                $path = '/uploads/subjects/' . $new_name;
+                $path = '/uploads/schedules/' . $new_name;
                 move_uploaded_file($file['tmp_name'], APP_DIR.$path);
-
             } else {
                 $error = 'File extension not allowed';
                 echo json_encode(['status' => 0, 'message' => $error]);
                 exit();
             }
-
-            $sql = "UPDATE subject_files SET name='$name', file='$path' WHERE id='$id'";
-
-
-            if (file_exists(APP_DIR.$old_file)){
-                unlink(APP_DIR.$old_file);
-            }
-
         } else {
-            $sql = "UPDATE subject_files SET name='$name' WHERE id='$id'";
+            $error = 'Please choose file';
+            echo json_encode(['status' => 0, 'message' => $error]);
+            exit();
         }
+
+
+        $sql = "INSERT INTO schedules SET name='$name', semester='$semester', year_id = '$year_id', section_id = '$section_id', file='$path'";
         $result = mysqli_query($conn, $sql);
-        echo json_encode(['status' => 1, 'message' => 'File Updated successfully']);
+        echo json_encode(['status' => 1, 'message' => 'Schedule added successfully']);
     }
 
 } else {

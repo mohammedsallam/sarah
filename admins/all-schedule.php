@@ -14,9 +14,15 @@ include('layout/sidebar.php');
 
 include('layout/topnav.php');
 
-$sql = "SELECT * FROM semesters";
+$year_id=@$_GET['year_id'];
+$section_id=@$_GET['section_id'];
+
+$sql = "SELECT schedules.*, years.name AS YNAME, sections.name AS SECNAME
+        FROM schedules LEFT JOIN years ON years.id=schedules.year_id 
+        LEFT JOIN sections ON sections.id=schedules.section_id 
+        WHERE schedules.year_id = '$year_id' AND schedules.section_id = '$section_id'";
 $result = mysqli_query($conn, $sql);
-$semesters = $result->fetch_all(MYSQLI_ASSOC);
+$files = $result->fetch_all(MYSQLI_ASSOC);
 
 ?>
 
@@ -55,7 +61,7 @@ $semesters = $result->fetch_all(MYSQLI_ASSOC);
 <div class="container-fluid">
     <!-- Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">list of semesters</h1>
+        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">list of files</h1>
     </div>
 
     <div class="row">
@@ -64,26 +70,40 @@ $semesters = $result->fetch_all(MYSQLI_ASSOC);
             <div class="alert alert-success d-none success_message text-center"></div>
         </div>
         <div class="col-md-12">
-            <table class="table table-bordered semesters_table">
+            <table class="table table-bordered students_table">
                 <thead>
-                <tr class="bg-dark text-light text-center">
+                <tr class="bg-dark text-light">
                     <th>ID</th>
-                    <th>Name</th>
+                    <th>File name</th>
+                    <th>Department</th>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th>Download</th>
+                    <th>Read</th>
                     <th>Control</th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                foreach ($semesters as $semester) { ?>
-                    <tr class="text-center">
-                        <td><?= $semester['id']?></td>
-                        <td><?= $semester['name']?></td>
-                        <td>
-                            <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/semesters/delete.php?id=<?=$semester['id']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
-                            <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/semesters/get_info.php?id=<?=$semester['id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
-                        </td>
-                    </tr>
-                <?php } ?>
+                    <?php
+                    foreach ($files as $file) { ?>
+                        <tr>
+                            <td><?= $file['id']?></td>
+                            <td><?= $file['name']?></td>
+                            <td><?= $file['SECNAME']?></td>
+                            <td><?= $file['YNAME']?></td>
+                            <td><?= $file['semester']?></td>
+                            <td>
+                                <a target="_blank" href="<?= APP.$file['file']?>"><i class="fa fa-download"></i> Download</a>
+                            </td>
+                            <td>
+                                <a target="_blank" href="<?= APP.'/controllers/schedules/read.php?file='.$file['id']?>"><i class="fa fa-book"></i> Read</a>
+                            </td>
+                            <td>
+                                <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/schedules/delete.php?id=<?=$file['id']?>&file=<?=$file['file']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
+                                <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/schedules/get_info.php?id=<?=$file['id']?>&file=<?=$file['file']?>&year_id=<?=$_GET['year_id']?>&section_id=<?=$_GET['section_id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
@@ -91,12 +111,12 @@ $semesters = $result->fetch_all(MYSQLI_ASSOC);
 
 </div>
 
-<!-- Edit semester modal -->
+<!-- Edit file modal -->
 <div class="modal fade edit_modal" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit teacher</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit schedule</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -104,15 +124,15 @@ $semesters = $result->fetch_all(MYSQLI_ASSOC);
             <div class="modal-body">
                 <div class="alert alert-danger d-none error_message text-center"></div>
                 <div class="alert alert-success d-none success_message text-center"></div>
-                <form class="edit_semester_form" action="<?=APP?>/controllers/semesters/edit.php" method="post"></form>
+                <form class="edit_file_form" action="<?=APP?>/controllers/schedules/edit.php" method="post" enctype="multipart/form-data"></form>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-success btn-block do_edit_semester_link" href="#">Edit</a>
+                <a class="btn btn-success btn-block do_edit_file_link" href="#">Edit</a>
             </div>
         </div>
     </div>
 </div>
-<!-- Delete semester modal -->
+<!-- Delete file modal -->
 <div class="modal fade delete_modal" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -138,7 +158,7 @@ $semesters = $result->fetch_all(MYSQLI_ASSOC);
 <script>
     $(document).ready(function () {
 
-        $('.semesters_table').DataTable();
+        $('.students_table').DataTable();
 
         $('.edit_link').click(function (e) {
             e.preventDefault();
@@ -148,21 +168,25 @@ $semesters = $result->fetch_all(MYSQLI_ASSOC);
                 type: 'GET',
                 dataType: 'html',
                 success: function (data) {
-                    $('.edit_modal .edit_semester_form').html(data);
+                    $('.edit_modal .edit_file_form').html(data);
                 }
             });
 
         });
 
-        $('.do_edit_semester_link').click(function (e) {
+        $('.do_edit_file_link').click(function (e) {
             e.preventDefault();
-            let form = $('.edit_semester_form');
+            let form = $('.edit_file_form'), formData = new FormData(form[0]),  error = [];
 
             $.ajax({
                 url: form.attr('action'),
                 type: form.attr('method'),
                 dataType: 'json',
-                data: form.serialize(),
+                crossDomain: true,
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: formData,
                 success:function (data) {
                     if (data.status === 0){
                         $('.modal .error_message').removeClass('d-none').html(data.message);
@@ -187,50 +211,6 @@ $semesters = $result->fetch_all(MYSQLI_ASSOC);
             e.preventDefault();
             $('.delete_modal a').attr('href', $(this).data('href'));
             $(this).addClass('deleted')
-
-            // let form = $('.add_section_form'), error = [];
-            //
-            // $('.add_section_form input').each(function () {
-            //     if ($(this).val() === ''){
-            //         error.push(true);
-            //         $(this).css({
-            //             border: '1px solid red'
-            //         });
-            //
-            //         $(this).focus(function () {
-            //             $(this).css({
-            //                 border: '1px solid #ced4da'
-            //             });
-            //         });
-            //     }
-            //
-            // });
-            //
-            // if (error.length === 0){
-            //     $.ajax({
-            //         url: form.attr('action'),
-            //         type: form.attr('method'),
-            //         dataType: 'json',
-            //         data: form.serialize(),
-            //         success: function (data) {
-            //             if (data.status === 0){
-            //                 $('.error_message').removeClass('d-none').html(data.message);
-            //                 $('.success_message').addClass('d-none').html('');
-            //             } else {
-            //                 $('.success_message').removeClass('d-none').html(data.message);
-            //                 $('.error_message').addClass('d-none').html('');
-            //                 let buffer = setInterval(function () {
-            //                     $('.success_message').addClass('d-none').html('');
-            //                     clearInterval(buffer)
-            //                 }, 3000);
-            //                 // $('input[type="password"]').each(function () {
-            //                 //     $(this).val('')
-            //                 // })
-            //             }
-            //         }
-            //     });
-            // }
-
         });
 
         $('.delete_modal a').click(function (e) {
@@ -257,5 +237,24 @@ $semesters = $result->fetch_all(MYSQLI_ASSOC);
                 }
             })
         })
+
+        $('.subject_id').change(function () {
+            let subject_id = $(this).val();
+
+            if (subject_id !== ''){
+                $.ajax({
+                    url: "<?=APP.'/controllers/files/get_subject_info.php'?>",
+                    type: 'get',
+                    dataType: 'json',
+                    data: {subject_id: subject_id},
+                    success: function (data) {
+                        $('.semester').val(data.semester);
+                        $('.year_id').val(data.year_id);
+                        $('.year_name').val(data.name);
+                    }
+                })
+            }
+
+        });
     })
 </script>
