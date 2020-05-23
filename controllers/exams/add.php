@@ -4,6 +4,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     require_once '../../connection.php';
 
     $name = $_POST['name'];
+    $section_id = filter_var($_POST['section_id'], FILTER_SANITIZE_NUMBER_INT);
+    $year_id = filter_var($_POST['year_id'], FILTER_SANITIZE_NUMBER_INT);
+    $semester = $_POST['semester'];
+    $file = $_FILES['file'];
     $error = [];
 
     foreach ($_POST as $key => $item) {
@@ -14,14 +18,57 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
     }
 
+
     if (empty($error) == false){
         echo json_encode(['status' => 0, 'message' => $error]);
     } else{
 
+        $path = '';
 
-        $sql = "INSERT INTO semesters SET name='$name'";
+        $allow_file  = [
+//            'application/vndd.openxmlformats-officedocument.presentationml.presentation',
+//            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+//            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+//            'application/vnd.ms-powerpoint',
+//            'application/x-msaccess',
+            'application/pdf',
+//            'image/jpeg',
+//            'image/png',
+//            'image/gif',
+        ];
+
+        if ($file['name'] !=  ''){
+//            $allow_ext  = array('jpg','jpeg','png','gif', 'pdf', 'doc', 'docx', 'ppt','pptx', 'accdb', 'xlsx');
+            $allow_ext  = array('pdf');
+            $ext = explode('.', $file['name']);
+            $ext = end($ext);
+            $ext = strtolower($ext);
+            $mime = mime_content_type($file['tmp_name']);
+            if (!in_array($mime, $allow_file)){
+                $error = 'Un allowed file type';
+                echo json_encode(['status' => 0, 'message' => $error]);
+                exit();
+            }
+
+            if(in_array($ext,$allow_ext)) {
+                $new_name = time().'.'.$ext;
+                $path = '/uploads/exams/' . $new_name;
+                move_uploaded_file($file['tmp_name'], APP_DIR.$path);
+            } else {
+                $error = 'File extension not allowed';
+                echo json_encode(['status' => 0, 'message' => $error]);
+                exit();
+            }
+        } else {
+            $error = 'Please choose file';
+            echo json_encode(['status' => 0, 'message' => $error]);
+            exit();
+        }
+
+
+        $sql = "INSERT INTO exams SET name='$name', semester='$semester', year_id = '$year_id', section_id = '$section_id', file='$path'";
         $result = mysqli_query($conn, $sql);
-        echo json_encode(['status' => 1, 'message' => 'Semester added successfully']);
+        echo json_encode(['status' => 1, 'message' => 'Exam added successfully']);
     }
 
 } else {

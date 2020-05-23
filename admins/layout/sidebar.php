@@ -188,7 +188,7 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
                   </a>
                   <div id="exam_schedule_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                       <div class="bg-white py-2 collapse-inner rounded">
-                          <a class="collapse-item" href="<?=APP?>/admins/add-exam-schedule.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Exam Schedule</a>
+                          <a class="collapse-item" href="<?=APP?>/admins/add-exam.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Exam Schedule</a>
                           <?php
                           $id = $section['id'];
                           $yearsSql = "SELECT section_years.*, years.name FROM section_years 
@@ -197,7 +197,7 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
                           $result = mysqli_query($conn, $yearsSql);
                           $years = $result->fetch_all(MYSQLI_ASSOC);
                           foreach ($years as $year) { ?>
-                              <a class="collapse-item" href="<?=APP?>/admins/all-schedule.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
+                              <a class="collapse-item" href="<?=APP?>/admins/all-exam.php?year_id=<?=$year['year_id']?>&section_id=<?=$id?>"><?= $year['name']?></a>
                           <?php } ?>
 
                       </div>

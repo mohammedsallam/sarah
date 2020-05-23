@@ -1,6 +1,7 @@
 <?php
 ob_start();
 session_start();
+
 if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 1){
     header("location: ../login.php");
     exit();
@@ -14,9 +15,17 @@ include('layout/sidebar.php');
 include('layout/topnav.php');
 
 $section_id = @$_GET['section_id'];
-$sql = "SELECT * FROM subjects WHERE section_id = '$section_id'";
+$section_name = $_GET['section'];
+
+$sql = "SELECT section_years.*, years.name, years.id AS YID FROM section_years 
+                        LEFT JOIN years on years.id=section_years.year_id 
+                        WHERE section_years.section_id = '$section_id' GROUP BY years.id";
 $result = mysqli_query($conn, $sql);
-$subjects = $result->fetch_all(MYSQLI_ASSOC);
+$years = $result->fetch_all(MYSQLI_ASSOC);
+
+$sql = "SELECT * FROM semesters";
+$result = mysqli_query($conn, $sql);
+$semesters = $result->fetch_all(MYSQLI_ASSOC);
 
 
 ?>
@@ -56,7 +65,7 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
 <div class="container-fluid">
     <!-- Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">add file</h1>
+        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">add exam</h1>
     </div>
 
     <div class="row">
@@ -65,7 +74,7 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
             <div class="alert alert-success d-none success_message text-center"></div>
         </div>
         <div class="container add-student">
-            <form action="<?=APP?>/controllers/files/add.php" method="POST" class="add_file_form" enctype="multipart/form-data">
+            <form action="<?=APP?>/controllers/exams/add.php" method="POST" class="add_schedule_form" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="name">File Name</label>
@@ -73,35 +82,36 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                     <div class="form-group col-md-6">
                         <label>Department</label>
-                        <input readonly type="text" class="form-control bg-light" value="<?=@$_GET['section']?>">
-                        <input type="hidden" name="section_id" class="form-control" value="<?=@$_GET['section_id']?>">
+                        <input readonly type="text" class="form-control bg-light" value="<?=@$section_name?>">
+                        <input type="hidden" name="section_id" class="form-control" value="<?=@$section_id?>">
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="subject_id">Subject</label>
-                        <select name="subject_id" id="subject_id" class="form-control subject_id">
-                            <option value="">Select Subject</option>
+                        <label for="year_id">Years</label>
+                        <select name="year_id" id="year_id" class="form-control year_id">
+                            <option value="">Select year</option>
                             <?php
-                            foreach ($subjects as $subject) { ?>
-                                <option value="<?= $subject['id']?>"><?= $subject['name']?></option>
+                            foreach ($years as $year) { ?>
+                                <option value="<?= $year['YID']?>"><?= $year['name']?></option>
                             <?php } ?>
                         </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Year</label>
-                        <input readonly type="text" class="form-control bg-light year_name">
-                        <input type="hidden" name="year_id" class="form-control year_id">
-                    </div>
-                    <div class="form-group col-md-6">
                         <label>Semester</label>
-                        <input readonly type="text" name="semester" class="form-control bg-light semester">
+                        <select name="semester" class="form-control">
+                            <option value="">Select semester</option>
+                            <?php
+                            foreach ($semesters as $semester) { ?>
+                                <option value="<?= $semester['name']?>"><?= $semester['name']?></option>
+                            <?php } ?>
+                        </select>
                     </div>
                     <div class="form-group col-md-6 pt-2">
-                        <label for="file" class="btn btn-info btn-block mt-4"><i class="fa fa-file"></i> Choose file</label>
+                        <label for="file" class="btn btn-info"><i class="fa fa-file"></i> Choose file</label>
                         <input type="file" id="file" name="file" class="d-none">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block add_file_button" name="submit">Add</button>
+                <button type="submit" class="btn btn-primary btn-block add_schedule_button" name="submit">Add</button>
             </form>
 
         </div>
@@ -114,33 +124,14 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
 <script>
     $(document).ready(function () {
 
-        $('.subject_id').change(function () {
-           let subject_id = $(this).val();
-
-           if (subject_id !== ''){
-               $.ajax({
-                   url: "<?=APP.'/controllers/files/get_subject_info.php'?>",
-                   type: 'get',
-                   dataType: 'json',
-                   data: {subject_id: subject_id},
-                   success: function (data) {
-                       $('.semester').val(data.semester);
-                       $('.year_id').val(data.year_id);
-                       $('.year_name').val(data.name);
-                   }
-               })
-           }
-
-        });
-
-        $('.add_file_button').click(function (e) {
+        $('.add_schedule_button').click(function (e) {
             e.preventDefault();
 
-            let form = $('.add_file_form'), formData = new FormData(form[0]),  error = [];
+            let form = $('.add_schedule_form'), formData = new FormData(form[0]),  error = [];
 
-            $('.add_file_form input, select').each(function () {
+            $('.add_schedule_form input, select').each(function () {
                 if ($(this).val() === ''){
-                    error.push(true);
+                    // error.push(true);
                     $(this).css({
                         border: '1px solid red'
                     });
