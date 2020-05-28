@@ -6,10 +6,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
    $id = (int) $_GET['id'];
    $file = $_GET['file'];
 
-    $sql = "SELECT * FROM exams WHERE id='$id'";
+    $sql = "SELECT * FROM courses WHERE id='$id'";
     $result = mysqli_query($conn, $sql);
-    $exam_file = $result->fetch_all(MYSQLI_ASSOC);
-    $exam_file = array_shift($exam_file);
+    $course_file = $result->fetch_all(MYSQLI_ASSOC);
+    $course_file = array_shift($course_file);
 
 }
 ?>
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 <div class="form-row">
     <div class="form-group col-md-6">
         <label for="name">File Name</label>
-        <input type="text" id="name" class="form-control" name="name" value="<?=$exam_file['name']?>">
+        <input type="text" id="name" class="form-control" name="name" value="<?=$course_file['name']?>">
     </div>
     <div class="form-group col-md-6 pt-2">
         <label for="file" class="btn btn-info btn-block mt-4"><i class="fa fa-file"></i> Choose file</label>

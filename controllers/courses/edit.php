@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             if(in_array($ext,$allow_ext)) {
                 $new_name = time().'.'.$ext;
-                $path = '/uploads/exams/' . $new_name;
+                $path = '/uploads/courses/' . $new_name;
                 move_uploaded_file($file['tmp_name'], APP_DIR.$path);
 
             } else {
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 exit();
             }
 
-            $sql = "UPDATE exams SET name='$name', file='$path' WHERE id='$id'";
+            $sql = "UPDATE courses SET name='$name', file='$path' WHERE id='$id'";
 
 
             if (file_exists(APP_DIR.$old_file)){
@@ -72,10 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             }
 
         } else {
-            $sql = "UPDATE exams SET name='$name' WHERE id='$id'";
+            $sql = "UPDATE courses SET name='$name' WHERE id='$id'";
         }
         $result = mysqli_query($conn, $sql);
-        echo json_encode(['status' => 1, 'message' => 'Exam Updated successfully']);
+        echo json_encode(['status' => 1, 'message' => 'Course Updated successfully']);
     }
 
 } else {

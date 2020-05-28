@@ -1,6 +1,7 @@
 <?php
 ob_start();
 session_start();
+
 if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 1){
     header("location: ../login.php");
     exit();
@@ -13,17 +14,19 @@ include('layout/sidebar.php');
 
 include('layout/topnav.php');
 
-$sql = "SELECT * FROM teachers";
-$result = mysqli_query($conn, $sql);
-$teacherCount = $result->num_rows;
+$section_id = @$_GET['section_id'];
+$section_name = $_GET['section'];
 
-$sql = "SELECT * FROM students";
+$sql = "SELECT section_years.*, years.name, years.id AS YID FROM section_years 
+                        LEFT JOIN years on years.id=section_years.year_id 
+                        WHERE section_years.section_id = '$section_id' GROUP BY years.id";
 $result = mysqli_query($conn, $sql);
-$studentCount = $result->num_rows;
+$years = $result->fetch_all(MYSQLI_ASSOC);
 
-$sql = "SELECT * FROM sections";
+$sql = "SELECT * FROM semesters";
 $result = mysqli_query($conn, $sql);
-$sections = $result->fetch_all(MYSQLI_ASSOC);
+$semesters = $result->fetch_all(MYSQLI_ASSOC);
+
 
 ?>
 
@@ -62,7 +65,7 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
 <div class="container-fluid">
     <!-- Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">add teacher</h1>
+        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">add course</h1>
     </div>
 
     <div class="row">
@@ -71,59 +74,45 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
             <div class="alert alert-success d-none success_message text-center"></div>
         </div>
         <div class="container add-student">
-            <form action="<?=APP?>/controllers/teachers/add.php" method="POST" class="add_teacher_form">
+            <form action="<?=APP?>/controllers/courses/add.php" method="POST" class="add_schedule_form" enctype="multipart/form-data">
                 <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="name">Name</label>
+                    <div class="form-group col-md-6">
+                        <label for="name">File Name</label>
                         <input type="text" id="name" class="form-control" name="name">
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" id="last_name" class="form-control" name="last_name">
+                    <div class="form-group col-md-6">
+                        <label>Department</label>
+                        <input readonly type="text" class="form-control bg-light" value="<?=@$section_name?>">
+                        <input type="hidden" name="section_id" class="form-control" value="<?=@$section_id?>">
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="username">User Name</label>
-                        <input type="text" id="username" class="form-control" name="username">
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="email">E-mail</label>
-                        <input type="email" id="email" class="form-control" name="email">
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="phone">Phone</label>
-                        <input type="tel" id="phone" class="form-control" name="phone">
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="phone">Section</label>
-                        <select name="section_id" class="form-control section_id">
-                            <option value="">Select </option>
+
+                    <div class="form-group col-md-6">
+                        <label for="year_id">Years</label>
+                        <select name="year_id" id="year_id" class="form-control year_id">
+                            <option value="">Select year</option>
                             <?php
-                            foreach ($sections as $section) { ?>
-                                <option value="<?=$section['id']?>"><?=$section['name']?></option>
+                            foreach ($years as $year) { ?>
+                                <option value="<?= $year['YID']?>"><?= $year['name']?></option>
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="phone">year</label>
-                        <select name="year_id" class="form-control year_id">
-                            <option value="">Select Section</option>
+                    <div class="form-group col-md-6">
+                        <label>Semester</label>
+                        <select name="semester" class="form-control">
+                            <option value="">Select semester</option>
+                            <?php
+                            foreach ($semesters as $semester) { ?>
+                                <option value="<?= $semester['name']?>"><?= $semester['name']?></option>
+                            <?php } ?>
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" class="form-control" name="password">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="confirm_password">Confirm Password</label>
-                        <input type="password" id="confirm_password" class="form-control" name="confirm_password">
+                    <div class="form-group col-md-6 pt-2">
+                        <label for="file" class="btn btn-info"><i class="fa fa-file"></i> Choose file</label>
+                        <input type="file" id="file" name="file" class="d-none">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block add_teacher_button" name="submit">Add</button>
+                <button type="submit" class="btn btn-primary btn-block add_schedule_button" name="submit">Add</button>
             </form>
-
-
-
-
 
         </div>
     </div>
@@ -135,14 +124,14 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
 <script>
     $(document).ready(function () {
 
-        $('.add_teacher_button').click(function (e) {
+        $('.add_schedule_button').click(function (e) {
             e.preventDefault();
 
-            let form = $('.add_teacher_form'), error = [];
+            let form = $('.add_schedule_form'), formData = new FormData(form[0]),  error = [];
 
-            $('.add_teacher_form input, select').each(function () {
+            $('.add_schedule_form input, select').each(function () {
                 if ($(this).val() === ''){
-                    error.push(true);
+                    // error.push(true);
                     $(this).css({
                         border: '1px solid red'
                     });
@@ -161,7 +150,11 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
                     url: form.attr('action'),
                     type: form.attr('method'),
                     dataType: 'json',
-                    data: form.serialize(),
+                    crossDomain: true,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: formData,
                     success: function (data) {
                         if (data.status === 0){
                             $('.error_message').removeClass('d-none').html(data.message);
@@ -179,24 +172,6 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
                         }
                     }
                 });
-            }
-
-
-        })
-
-        $('.section_id').change(function(){
-            if ($(this).val() !== ''){
-                $.ajax({
-                    url: '../controllers/teachers/get_section_year.php',
-                    type: 'GET',
-                    dataType: 'html',
-                    data: {section_id: $(this).val()},
-                    success: function (data) {
-                        $('.year_id').html(data)
-                    }
-                })
-            } else {
-                $('.year_id').html('<option>Select Section</option>')
             }
         })
     })
