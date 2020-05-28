@@ -206,10 +206,10 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
       <?php  } ?>
       <!-- END EXAM SCHEDULE -->
 
-      <!-- START COURSE -->
+      <!-- START MATERIAL -->
       <hr class="sidebar-divider">
       <li class="sidebar-heading">
-          courses
+          Materials
       </li>
       <?php
 
@@ -221,7 +221,7 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
               </a>
               <div id="course_<?=$section['id']?>" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                   <div class="bg-white py-2 collapse-inner rounded">
-                      <a class="collapse-item" href="<?=APP?>/admins/add-course.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Course</a>
+                      <a class="collapse-item" href="<?=APP?>/admins/add-course.php?section=<?=$section['name']?>&section_id=<?=$section['id']?>">Add Material</a>
                       <?php
                       $id = $section['id'];
                       $yearsSql = "SELECT section_years.*, years.name FROM section_years 
@@ -237,7 +237,7 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
               </div>
           </li>
       <?php  } ?>
-      <!-- END COURSE -->
+      <!-- END MATERIAL -->
 
 
       <!-- Start Sections -->
