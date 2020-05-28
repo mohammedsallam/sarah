@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         $sql = "INSERT INTO subjects SET name='$name', teacher_id='$teacher_id', semester='$semester', credit='$credit', year_id = '$year_id', section_id = '$section_id'";
         $result = mysqli_query($conn, $sql);
-        echo json_encode(['status' => 1, 'message' => 'Student added successfully']);
+        echo json_encode(['status' => 1, 'message' => 'Subject added successfully']);
     }
 
 } else {

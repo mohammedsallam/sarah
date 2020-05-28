@@ -14,9 +14,10 @@ include('../layout/header.php');
 include('layout/sidebar.php');
 
 include('layout/topnav.php');
-$section_id = $_GET['section_id'];
 
-$teacherSql = "SELECT * FROM teachers WHERE section_id = '$section_id'";
+$section_id = @$_GET['section_id'];
+
+$teacherSql = "SELECT * FROM teachers";
 $result = mysqli_query($conn, $teacherSql);
 $teachers = $result->fetch_all(MYSQLI_ASSOC);
 $teacherCount = $result->num_rows;
@@ -29,8 +30,10 @@ $sectionSql = "SELECT * FROM sections";
 $result = mysqli_query($conn, $sectionSql);
 $sections = $result->fetch_all(MYSQLI_ASSOC);
 
-$yearsSql = "SELECT * FROM years";
-$result = mysqli_query($conn, $yearsSql);
+$sql = "SELECT section_years.*, years.name FROM section_years 
+            LEFT JOIN years on years.id=section_years.year_id 
+            WHERE section_years.section_id = '$section_id' GROUP BY years.id";
+$result = mysqli_query($conn, $sql);
 $years = $result->fetch_all(MYSQLI_ASSOC);
 
 $sql = "SELECT * FROM semesters";
@@ -108,7 +111,11 @@ $semesters = $result->fetch_all(MYSQLI_ASSOC);
                     <div class="form-group col-md-6">
                         <label for="year_id">Year</label>
                         <select name="year_id" id="year_id" class="form-control year_id">
-                            <option value="">Select Teacher first</option>
+                            <option value="">Select</option>
+                            <?php
+                            foreach ($years as $year) { ?>
+                                <option value="<?=$year['year_id']?>"><?=$year['name']?></option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="form-group col-md-6">
@@ -192,22 +199,22 @@ $semesters = $result->fetch_all(MYSQLI_ASSOC);
             }
 
 
-        })
+        });
 
-        $(document).on('change', '.teacher_id', function(){
-            if ($(this).val() !== ''){
-                $.ajax({
-                    url: '../controllers/subjects/get_teacher_info.php',
-                    type: 'GET',
-                    dataType: 'html',
-                    data: {teacher_id: $(this).val()},
-                    success: function (data) {
-                        $('.year_id').html(data)
-                    }
-                })
-            } else {
-                $('.year_id').html('<option>Select Section</option>')
-            }
-        })
+        // $(document).on('change', '.teacher_id', function(){
+        //     if ($(this).val() !== ''){
+        //         $.ajax({
+        //             url: '../controllers/subjects/get_teacher_info.php',
+        //             type: 'GET',
+        //             dataType: 'html',
+        //             data: {teacher_id: $(this).val()},
+        //             success: function (data) {
+        //                 $('.year_id').html(data)
+        //             }
+        //         })
+        //     } else {
+        //         $('.year_id').html('<option>Select Section</option>')
+        //     }
+        // })
     })
 </script>

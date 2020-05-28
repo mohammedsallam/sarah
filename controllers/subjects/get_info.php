@@ -4,6 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     require_once '../../connection.php';
 
    $id = (int) $_GET['id'];
+   $section_id = (int) $_GET['section_id'];
 
     $sql = "SELECT subjects.*, 
         years.name AS YNAME, 
@@ -25,15 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     $result = mysqli_query($conn, $sectionSql);
     $sections = $result->fetch_all(MYSQLI_ASSOC);
 
-    $year_id = $subject['YID'];
-    $yearsSql = "SELECT * FROM years WHERE id ='$year_id'";
+//    $year_id = $subject['YID'];
+    $yearsSql = "SELECT section_years.*, years.name FROM section_years 
+            LEFT JOIN years on years.id=section_years.year_id 
+            WHERE section_years.section_id = '$section_id' GROUP BY years.id";
     $result = mysqli_query($conn, $yearsSql);
-    $year = $result->fetch_array(MYSQLI_ASSOC);
+    $years = $result->fetch_all(MYSQLI_ASSOC);
 
-    $teacher_id = $subject['teacher_id'];
-    $teacherSql = "SELECT * FROM teachers WHERE id = '$teacher_id'";
+
+    $teacherSql = "SELECT * FROM teachers";
     $result = mysqli_query($conn, $teacherSql);
-    $teacher = $result->fetch_array(MYSQLI_ASSOC);
+    $teachers = $result->fetch_all(MYSQLI_ASSOC);
 
     $yearsSql = "SELECT * FROM semesters";
     $result = mysqli_query($conn, $yearsSql);
@@ -48,8 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     </div>
     <div class="form-group col-md-6">
         <label for="teacher_id">Teacher</label>
-        <input type="text" class="form-control bg-white" readonly  value="<?=$teacher['name']?>">
-        <input type="hidden" name="teacher_id" value="<?=$teacher['id']?>">
+        <select name="teacher_id" id="teacher_id" class="form-control teacher_id">
+            <option value="">Select teacher</option>
+            <?php
+            foreach ($teachers as $teacher) { ?>
+                <option <?= $subject['teacher_id'] == $teacher['id'] ? 'selected' : ''?> value="<?= $teacher['id']?>"><?= $teacher['name']?></option>
+            <?php } ?>
+        </select>
     </div>
     <div class="form-group col-md-6">
         <label for="section_id">Department</label>
@@ -58,8 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     </div>
     <div class="form-group col-md-6">
         <label for="year_id">Year</label>
-        <input type="text" class="form-control bg-white" readonly  value="<?=$year['name']?>">
-        <input type="hidden" name="year_id" value="<?=$year['id']?>">
+        <select name="year_id" id="year_id" class="form-control">
+            <option value="">Select Year</option>
+            <?php
+            foreach ($years as $year) { ?>
+                <option <?= $subject['year_id'] == $year['year_id'] ? 'selected' : ''?> value="<?=$year['year_id']?>"><?=$year['name']?></option>
+            <?php } ?>
+        </select>
     </div>
     <div class="form-group col-md-6">
         <label for="semester">Semester</label>

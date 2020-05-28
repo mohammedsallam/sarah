@@ -5,6 +5,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     $id = (int) $_GET['id'];
     $sql = "DELETE FROM students WHERE id = '$id'";
     $query = mysqli_query($conn, $sql);
-    echo json_encode(['status' => 1, 'message' => "Student Number $id Deleted successfully"]);
+    echo json_encode(['status' => 1, 'message' => "Subject Number $id Deleted successfully"]);
 
 }

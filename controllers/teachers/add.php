@@ -5,8 +5,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     $name = $_POST['name'];
     $last_name = $_POST['last_name'];
-    $section_id = $_POST['section_id'];
-    $year_id = $_POST['year_id'];
+//    $section_id = $_POST['section_id'];
+//    $year_id = $_POST['year_id'];
     $username = $_POST['username'];
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
     $phone = filter_var($_POST['phone'], FILTER_SANITIZE_NUMBER_INT);
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
 
         $password = password_hash($password, CRYPT_BLOWFISH);
-        $sql = "INSERT INTO teachers SET name='$name', section_id = '$section_id', year_id = '$year_id', last_name = '$last_name', username = '$username', email='$email', phone='$phone', password='$password'";
+        $sql = "INSERT INTO teachers SET name='$name', last_name = '$last_name', username = '$username', email='$email', phone='$phone', password='$password'";
         $result = mysqli_query($conn, $sql);
         echo json_encode(['status' => 1, 'message' => 'Teacher added successfully']);
     }

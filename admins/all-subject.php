@@ -73,7 +73,7 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
             <div class="alert alert-success d-none success_message text-center"></div>
         </div>
         <div class="col-md-12">
-            <table class="table table-bordered students_table">
+            <table class="table table-bordered table-responsive students_table">
                 <thead>
                 <tr class="bg-dark text-light">
                     <th>ID</th>
@@ -99,7 +99,7 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
                             <td><?= $subject['credit']?></td>
                             <td>
                                 <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/subjects/delete.php?id=<?=$subject['id']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
-                                <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/subjects/get_info.php?id=<?=$subject['id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
+                                <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/subjects/get_info.php?id=<?=$subject['id']?>&section_id=<?=$section_id?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
                             </td>
                         </tr>
                     <?php } ?>

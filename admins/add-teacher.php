@@ -85,30 +85,30 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
                         <label for="username">User Name</label>
                         <input type="text" id="username" class="form-control" name="username">
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-6">
                         <label for="email">E-mail</label>
                         <input type="email" id="email" class="form-control" name="email">
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-6">
                         <label for="phone">Phone</label>
                         <input type="tel" id="phone" class="form-control" name="phone">
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="phone">Section</label>
-                        <select name="section_id" class="form-control section_id">
-                            <option value="">Select </option>
-                            <?php
-                            foreach ($sections as $section) { ?>
-                                <option value="<?=$section['id']?>"><?=$section['name']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="phone">year</label>
-                        <select name="year_id" class="form-control year_id">
-                            <option value="">Select Section</option>
-                        </select>
-                    </div>
+<!--                    <div class="form-group col-md-3">-->
+<!--                        <label for="phone">Section</label>-->
+<!--                        <select name="section_id" class="form-control section_id">-->
+<!--                            <option value="">Select </option>-->
+<!--                            --><?php
+//                            foreach ($sections as $section) { ?>
+<!--                                <option value="--><?//=$section['id']?><!--">--><?//=$section['name']?><!--</option>-->
+<!--                            --><?php //} ?>
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                    <div class="form-group col-md-3">-->
+<!--                        <label for="phone">year</label>-->
+<!--                        <select name="year_id" class="form-control year_id">-->
+<!--                            <option value="">Select Section</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
                     <div class="form-group col-md-6">
                         <label for="password">Password</label>
                         <input type="password" id="password" class="form-control" name="password">
@@ -184,20 +184,20 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
 
         })
 
-        $('.section_id').change(function(){
-            if ($(this).val() !== ''){
-                $.ajax({
-                    url: '../controllers/teachers/get_section_year.php',
-                    type: 'GET',
-                    dataType: 'html',
-                    data: {section_id: $(this).val()},
-                    success: function (data) {
-                        $('.year_id').html(data)
-                    }
-                })
-            } else {
-                $('.year_id').html('<option>Select Section</option>')
-            }
-        })
+        // $('.section_id').change(function(){
+        //     if ($(this).val() !== ''){
+        //         $.ajax({
+        //             url: '../controllers/teachers/get_section_year.php',
+        //             type: 'GET',
+        //             dataType: 'html',
+        //             data: {section_id: $(this).val()},
+        //             success: function (data) {
+        //                 $('.year_id').html(data)
+        //             }
+        //         })
+        //     } else {
+        //         $('.year_id').html('<option>Select Section</option>')
+        //     }
+        // })
     })
 </script>
