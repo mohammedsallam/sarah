@@ -20,7 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     $result = mysqli_query($conn, $sql);
     $years = $result->fetch_assoc();
 
-    $sql = "SELECT subjects.* FROM subjects WHERE year_id = '$year_id' ";
+    $sql = "SELECT teachers.name AS 'TEACHER', subjects.* FROM subjects 
+            LEFT JOIN teachers ON teachers.id=subjects.teacher_id 
+            WHERE subjects.year_id = '$year_id' AND subjects.section_id = '$section_id'";
     $result = mysqli_query($conn, $sql);
     $subjects = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -51,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
             <label for="session">Session</label>
             <select name="session" id="session" class="form-control">
                 <option <?php if($marks['session'] == 'semester') { echo 'selected'; }?>  value="semester">Semester</option>
-                <option <?php if($marks['session'] == 're_exam') { echo 'selected'; }?> value="re_exam">Re-Exam</option>
+                <option <?php if($marks['session'] == 'Re-Exam') { echo 'selected'; }?> value="Re-Exam">Re-Exam</option>
             </select>
         </div>
     </div>

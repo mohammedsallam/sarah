@@ -2,11 +2,10 @@
 ob_start();
 session_start();
 
-if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 1){
+if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 2){
     header("location: ../login.php");
     exit();
 }
-
 require('../connection.php');
 
 include('../layout/header.php');
@@ -15,17 +14,11 @@ include('layout/sidebar.php');
 
 include('layout/topnav.php');
 
-$year_id=@$_GET['year_id'];
-$section_id=@$_GET['section_id'];
-
-$sql = "SELECT subjects.*, years.name AS YNAME, teachers.name AS TNAME, sections.name AS SNAME
-        FROM subjects LEFT JOIN years ON years.id=subjects.year_id 
-        LEFT JOIN teachers ON teachers.id=subjects.teacher_id 
-        LEFT JOIN sections ON sections.id=subjects.section_id 
-        WHERE subjects.year_id = '$year_id' AND subjects.section_id = '$section_id'";
-
+$sql = "SELECT courses.*, years.name AS YNAME, sections.name AS SECNAME
+        FROM courses LEFT JOIN years ON years.id=courses.year_id 
+        LEFT JOIN sections ON sections.id=courses.section_id";
 $result = mysqli_query($conn, $sql);
-$subjects = $result->fetch_all(MYSQLI_ASSOC);
+$files = $result->fetch_all(MYSQLI_ASSOC);
 
 ?>
 
@@ -64,7 +57,7 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
 <div class="container-fluid">
     <!-- Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">list of subjects</h1>
+        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">list of courses</h1>
     </div>
 
     <div class="row">
@@ -77,32 +70,31 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
                 <thead>
                 <tr class="bg-dark text-light">
                     <th>ID</th>
-                    <th>Subject</th>
-                    <th>Teacher</th>
+                    <th>File name</th>
                     <th>Department</th>
                     <th>Year</th>
                     <th>Semester</th>
-                    <th>Credit</th>
-                    <th>Control</th>
+                    <th>Download</th>
+                    <th>Read</th>
                 </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    foreach ($subjects as $subject) { ?>
-                        <tr>
-                            <td><?= $subject['id']?></td>
-                            <td><?= $subject['name']?></td>
-                            <td><?= $subject['TNAME']?></td>
-                            <td><?= $subject['SNAME']?></td>
-                            <td><?= $subject['YNAME']?></td>
-                            <td><?= $subject['semester']?></td>
-                            <td><?= $subject['credit']?></td>
-                            <td>
-                                <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/subjects/delete.php?id=<?=$subject['id']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
-                                <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/subjects/get_info.php?id=<?=$subject['id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
-                            </td>
-                        </tr>
-                    <?php } ?>
+                <?php
+                foreach ($files as $file) { ?>
+                    <tr>
+                        <td><?= $file['id']?></td>
+                        <td><?= $file['name']?></td>
+                        <td><?= $file['SECNAME']?></td>
+                        <td><?= $file['YNAME']?></td>
+                        <td><?= $file['semester']?></td>
+                        <td>
+                            <a target="_blank" href="<?= APP.$file['file']?>"><i class="fa fa-download"></i> Download</a>
+                        </td>
+                        <td>
+                            <a target="_blank" href="<?= APP.'/controllers/courses/read.php?file='.$file['id']?>"><i class="fa fa-book"></i> Read</a>
+                        </td>
+                    </tr>
+                <?php } ?>
                 </tbody>
             </table>
         </div>
@@ -110,12 +102,12 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
 
 </div>
 
-<!-- Edit teacher modal -->
+<!-- Edit file modal -->
 <div class="modal fade edit_modal" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit teacher</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit exam</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -123,15 +115,15 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
             <div class="modal-body">
                 <div class="alert alert-danger d-none error_message text-center"></div>
                 <div class="alert alert-success d-none success_message text-center"></div>
-                <form class="edit_teacher_form" action="<?=APP?>/controllers/subjects/edit.php" method="post"></form>
+                <form class="edit_file_form" action="<?=APP?>/controllers/courses/edit.php" method="post" enctype="multipart/form-data"></form>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-success btn-block do_edit_teacher_link" href="#">Edit</a>
+                <a class="btn btn-success btn-block do_edit_file_link" href="#">Edit</a>
             </div>
         </div>
     </div>
 </div>
-<!-- Delete teacher modal -->
+<!-- Delete file modal -->
 <div class="modal fade delete_modal" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -167,21 +159,25 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
                 type: 'GET',
                 dataType: 'html',
                 success: function (data) {
-                    $('.edit_modal .edit_teacher_form').html(data);
+                    $('.edit_modal .edit_file_form').html(data);
                 }
             });
 
         });
 
-        $('.do_edit_teacher_link').click(function (e) {
+        $('.do_edit_file_link').click(function (e) {
             e.preventDefault();
-            let form = $('.edit_teacher_form');
+            let form = $('.edit_file_form'), formData = new FormData(form[0]),  error = [];
 
             $.ajax({
                 url: form.attr('action'),
                 type: form.attr('method'),
                 dataType: 'json',
-                data: form.serialize(),
+                crossDomain: true,
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: formData,
                 success:function (data) {
                     if (data.status === 0){
                         $('.modal .error_message').removeClass('d-none').html(data.message);
@@ -206,50 +202,6 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
             e.preventDefault();
             $('.delete_modal a').attr('href', $(this).data('href'));
             $(this).addClass('deleted')
-
-            // let form = $('.add_teacher_form'), error = [];
-            //
-            // $('.add_teacher_form input').each(function () {
-            //     if ($(this).val() === ''){
-            //         error.push(true);
-            //         $(this).css({
-            //             border: '1px solid red'
-            //         });
-            //
-            //         $(this).focus(function () {
-            //             $(this).css({
-            //                 border: '1px solid #ced4da'
-            //             });
-            //         });
-            //     }
-            //
-            // });
-            //
-            // if (error.length === 0){
-            //     $.ajax({
-            //         url: form.attr('action'),
-            //         type: form.attr('method'),
-            //         dataType: 'json',
-            //         data: form.serialize(),
-            //         success: function (data) {
-            //             if (data.status === 0){
-            //                 $('.error_message').removeClass('d-none').html(data.message);
-            //                 $('.success_message').addClass('d-none').html('');
-            //             } else {
-            //                 $('.success_message').removeClass('d-none').html(data.message);
-            //                 $('.error_message').addClass('d-none').html('');
-            //                 let buffer = setInterval(function () {
-            //                     $('.success_message').addClass('d-none').html('');
-            //                     clearInterval(buffer)
-            //                 }, 3000);
-            //                 // $('input[type="password"]').each(function () {
-            //                 //     $(this).val('')
-            //                 // })
-            //             }
-            //         }
-            //     });
-            // }
-
         });
 
         $('.delete_modal a').click(function (e) {
@@ -276,5 +228,24 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
                 }
             })
         })
+
+        $('.subject_id').change(function () {
+            let subject_id = $(this).val();
+
+            if (subject_id !== ''){
+                $.ajax({
+                    url: "<?=APP.'/controllers/files/get_subject_info.php'?>",
+                    type: 'get',
+                    dataType: 'json',
+                    data: {subject_id: subject_id},
+                    success: function (data) {
+                        $('.semester').val(data.semester);
+                        $('.year_id').val(data.year_id);
+                        $('.year_name').val(data.name);
+                    }
+                })
+            }
+
+        });
     })
 </script>

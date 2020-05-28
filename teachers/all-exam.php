@@ -2,11 +2,10 @@
 ob_start();
 session_start();
 
-if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 1){
+if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 2){
     header("location: ../login.php");
     exit();
 }
-
 require('../connection.php');
 
 include('../layout/header.php');
@@ -15,14 +14,9 @@ include('layout/sidebar.php');
 
 include('layout/topnav.php');
 
-$year_id=@$_GET['year_id'];
-$section_id=@$_GET['section_id'];
-
-$sql = "SELECT subjects.name, subjects.semester, years.name AS YNAME, sections.name AS SECNAME, subject_files.name AS FNAME, subject_files.id AS FID, subject_files.file
-        FROM subjects LEFT JOIN years ON years.id=subjects.year_id 
-        LEFT JOIN sections ON sections.id=subjects.section_id 
-        LEFT JOIN subject_files ON subject_files.subject_id=subjects.id 
-        WHERE subject_files.year_id = '$year_id' AND subject_files.section_id = '$section_id'";
+$sql = "SELECT exams.*, years.name AS YNAME, sections.name AS SECNAME
+        FROM exams LEFT JOIN years ON years.id=exams.year_id 
+        LEFT JOIN sections ON sections.id=exams.section_id";
 $result = mysqli_query($conn, $sql);
 $files = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -63,7 +57,7 @@ $files = $result->fetch_all(MYSQLI_ASSOC);
 <div class="container-fluid">
     <!-- Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">list of files</h1>
+        <h1 class="m-auto h3 mb-0 text-gray-800 text-uppercase">list of exams</h1>
     </div>
 
     <div class="row">
@@ -78,36 +72,29 @@ $files = $result->fetch_all(MYSQLI_ASSOC);
                     <th>ID</th>
                     <th>File name</th>
                     <th>Department</th>
-                    <th>Subject</th>
                     <th>Year</th>
                     <th>Semester</th>
                     <th>Download</th>
                     <th>Read</th>
-                    <th>Control</th>
                 </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    foreach ($files as $file) { ?>
-                        <tr>
-                            <td><?= $file['FID']?></td>
-                            <td><?= $file['FNAME']?></td>
-                            <td><?= $file['SECNAME']?></td>
-                            <td><?= $file['name']?></td>
-                            <td><?= $file['YNAME']?></td>
-                            <td><?= $file['semester']?></td>
-                            <td>
-                                <a target="_blank" href="<?= APP.$file['file']?>"><i class="fa fa-download"></i> Download</a>
-                            </td>
-                            <td>
-                                <a target="_blank" href="<?= APP.'/controllers/files/read.php?file='.$file['FID']?>"><i class="fa fa-book"></i> Read</a>
-                            </td>
-                            <td>
-                                <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/files/delete.php?id=<?=$file['FID']?>&file=<?=$file['file']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
-                                <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/files/get_info.php?id=<?=$file['FID']?>&file=<?=$file['file']?>&year_id=<?=$_GET['year_id']?>&section_id=<?=$_GET['section_id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
-                            </td>
-                        </tr>
-                    <?php } ?>
+                <?php
+                foreach ($files as $file) { ?>
+                    <tr>
+                        <td><?= $file['id']?></td>
+                        <td><?= $file['name']?></td>
+                        <td><?= $file['SECNAME']?></td>
+                        <td><?= $file['YNAME']?></td>
+                        <td><?= $file['semester']?></td>
+                        <td>
+                            <a target="_blank" href="<?= APP.$file['file']?>"><i class="fa fa-download"></i> Download</a>
+                        </td>
+                        <td>
+                            <a target="_blank" href="<?= APP.'/controllers/exams/read.php?file='.$file['id']?>"><i class="fa fa-book"></i> Read</a>
+                        </td>
+                    </tr>
+                <?php } ?>
                 </tbody>
             </table>
         </div>
@@ -120,7 +107,7 @@ $files = $result->fetch_all(MYSQLI_ASSOC);
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit file</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit exam</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -128,7 +115,7 @@ $files = $result->fetch_all(MYSQLI_ASSOC);
             <div class="modal-body">
                 <div class="alert alert-danger d-none error_message text-center"></div>
                 <div class="alert alert-success d-none success_message text-center"></div>
-                <form class="edit_file_form" action="<?=APP?>/controllers/files/edit.php" method="post" enctype="multipart/form-data"></form>
+                <form class="edit_file_form" action="<?=APP?>/controllers/exams/edit.php" method="post" enctype="multipart/form-data"></form>
             </div>
             <div class="modal-footer">
                 <a class="btn btn-success btn-block do_edit_file_link" href="#">Edit</a>

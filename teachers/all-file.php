@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 
-if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 1){
+if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 2){
     header("location: ../login.php");
     exit();
 }
@@ -15,16 +15,19 @@ include('layout/sidebar.php');
 
 include('layout/topnav.php');
 
-$year_id=@$_GET['year_id'];
-$section_id=@$_GET['section_id'];
-
-$sql = "SELECT subjects.name, subjects.semester, years.name AS YNAME, sections.name AS SECNAME, subject_files.name AS FNAME, subject_files.id AS FID, subject_files.file
-        FROM subjects LEFT JOIN years ON years.id=subjects.year_id 
-        LEFT JOIN sections ON sections.id=subjects.section_id 
-        LEFT JOIN subject_files ON subject_files.subject_id=subjects.id 
-        WHERE subject_files.year_id = '$year_id' AND subject_files.section_id = '$section_id'";
+$sql = "SELECT subjects.name, 
+        subjects.semester, 
+        years.name AS YNAME, 
+        sections.name AS SECNAME, 
+        subject_files.name AS FNAME, 
+        subject_files.id AS FID, 
+        subject_files.file
+        FROM subject_files LEFT JOIN years ON years.id=subject_files.year_id 
+        LEFT JOIN sections ON sections.id=subject_files.section_id 
+        LEFT JOIN subjects ON subject_files.subject_id=subjects.id";
 $result = mysqli_query($conn, $sql);
 $files = $result->fetch_all(MYSQLI_ASSOC);
+
 
 ?>
 
@@ -83,7 +86,6 @@ $files = $result->fetch_all(MYSQLI_ASSOC);
                     <th>Semester</th>
                     <th>Download</th>
                     <th>Read</th>
-                    <th>Control</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -101,10 +103,6 @@ $files = $result->fetch_all(MYSQLI_ASSOC);
                             </td>
                             <td>
                                 <a target="_blank" href="<?= APP.'/controllers/files/read.php?file='.$file['FID']?>"><i class="fa fa-book"></i> Read</a>
-                            </td>
-                            <td>
-                                <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/files/delete.php?id=<?=$file['FID']?>&file=<?=$file['file']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
-                                <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/files/get_info.php?id=<?=$file['FID']?>&file=<?=$file['file']?>&year_id=<?=$_GET['year_id']?>&section_id=<?=$_GET['section_id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
                             </td>
                         </tr>
                     <?php } ?>

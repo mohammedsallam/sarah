@@ -1,7 +1,7 @@
 <?php
 ob_start();
 session_start();
-if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 1){
+if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 2){
     header("location: ../login.php");
     exit();
 }
@@ -14,9 +14,19 @@ include('layout/sidebar.php');
 include('layout/topnav.php');
 
 $section_id = @$_GET['section_id'];
-$sql = "SELECT * FROM subjects WHERE section_id = '$section_id'";
+$subject_name = @$_GET['subject_name'];
+$subject_id = @$_GET['subject_id'];
+
+$sql = "SELECT subjects.semester, years.name AS 'YEAR_NAME', years.id AS 'YEAR_ID' FROM subjects
+        LEFT JOIN years ON years.id=subjects.year_id WHERE subjects.id = '$subject_id'";
 $result = mysqli_query($conn, $sql);
-$subjects = $result->fetch_all(MYSQLI_ASSOC);
+$subject = $result->fetch_array(MYSQLI_ASSOC);
+
+
+$sql = "SELECT sections.* FROM sections WHERE id = '$section_id'";
+$result = mysqli_query($conn, $sql);
+$section = $result->fetch_array(MYSQLI_ASSOC);
+
 
 
 ?>
@@ -73,28 +83,24 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                     <div class="form-group col-md-6">
                         <label>Department</label>
-                        <input readonly type="text" class="form-control bg-light" value="<?=@$_GET['section']?>">
+                        <input readonly type="text" class="form-control bg-white" value="<?=@$section['name']?>">
                         <input type="hidden" name="section_id" class="form-control" value="<?=@$_GET['section_id']?>">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="subject_id">Subject</label>
-                        <select name="subject_id" id="subject_id" class="form-control subject_id">
-                            <option value="">Select Subject</option>
-                            <?php
-                            foreach ($subjects as $subject) { ?>
-                                <option value="<?= $subject['id']?>"><?= $subject['name']?></option>
-                            <?php } ?>
-                        </select>
+                        <input type="text" class="form-control bg-white" readonly value="<?=$subject_name?>">
+                        <input type="hidden" name="subject_id" value="<?=$subject_id?>">
                     </div>
                     <div class="form-group col-md-6">
                         <label>Year</label>
-                        <input readonly type="text" class="form-control bg-light year_name">
-                        <input type="hidden" name="year_id" class="form-control year_id">
+                        <input readonly type="text" class="form-control bg-white" value="<?=$subject['YEAR_NAME']?>">
+                        <input type="hidden" name="year_id" value="<?=$subject['YEAR_ID']?>">
                     </div>
                     <div class="form-group col-md-6">
                         <label>Semester</label>
-                        <input readonly type="text" name="semester" class="form-control bg-light semester">
+                        <input readonly type="text" class="form-control bg-white" value="<?=$subject['semester']?>">
+                        <input type="hidden" name="semester" value="<?=$subject['semester']?>">
                     </div>
                     <div class="form-group col-md-6 pt-2">
                         <label for="file" class="btn btn-info btn-block mt-4"><i class="fa fa-file"></i> Choose file</label>

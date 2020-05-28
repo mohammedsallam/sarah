@@ -44,6 +44,7 @@ $result = mysqli_query($conn, $sql);
 $marks = $result->fetch_all(MYSQLI_BOTH);
 $teacherCount = $result->num_rows;
 
+
 $sql = "SELECT * FROM fees";
 $result = mysqli_query($conn, $sql);
 $fees = $result->fetch_all(MYSQLI_BOTH);
@@ -133,7 +134,7 @@ $fees = $result->fetch_all(MYSQLI_BOTH);
                                 <label for="session">Session</label>
                                 <select name="session" id="session" class="form-control">
                                     <option value="semester">Semester</option>
-                                    <option value="re_exam">Re-Exam</option>
+                                    <option value="Re-Exam">Re-Exam</option>
                                 </select>
                             </div>
                         </div>
