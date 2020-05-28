@@ -6,9 +6,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $id = (int) $_POST['id'];
     $name = $_POST['name'];
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-    $fess = filter_var($_POST['fees'], FILTER_VALIDATE_FLOAT);
-    $payed = filter_var($_POST['payed'], FILTER_VALIDATE_FLOAT);
-    $remaining = filter_var($_POST['remaining'], FILTER_VALIDATE_FLOAT);
+//    $fess = filter_var($_POST['fees'], FILTER_VALIDATE_FLOAT);
+//    $payed = filter_var($_POST['payed'], FILTER_VALIDATE_FLOAT);
+//    $remaining = filter_var($_POST['remaining'], FILTER_VALIDATE_FLOAT);
     $section_id = filter_var($_POST['section_id'], FILTER_SANITIZE_NUMBER_INT);
     $year_id = filter_var($_POST['year_id'], FILTER_SANITIZE_NUMBER_INT);
     $password = $_POST['password'];
@@ -56,15 +56,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
        }
 
         $result = mysqli_query($conn, $sql);
-        $sql = "SELECT * FROM fees WHERE student_id = '$id'";
-        $result = mysqli_query($conn, $sql);
-        if ($result->num_rows > 0){
-            $sql = "UPDATE fees SET student_id='$id', fees='$fess', payed='$payed', remaining = '$remaining' WHERE student_id = '$id'";
-            $result = mysqli_query($conn, $sql);
-        } else {
-            $sql = "INSERT INTO fees SET student_id='$id', fees='$fess', payed='$payed', remaining = '$remaining'";
-            $result = mysqli_query($conn, $sql);
-        }
+
+//        $sql = "SELECT * FROM fees WHERE student_id = '$id'";
+//        $result = mysqli_query($conn, $sql);
+//        if ($result->num_rows > 0){
+//            $sql = "UPDATE fees SET student_id='$id', fees='$fess', payed='$payed', remaining = '$remaining' WHERE student_id = '$id'";
+//            $result = mysqli_query($conn, $sql);
+//        } else {
+//            $sql = "INSERT INTO fees SET student_id='$id', fees='$fess', payed='$payed', remaining = '$remaining'";
+//            $result = mysqli_query($conn, $sql);
+//        }
+
+
         echo json_encode(['status' => 1, 'message' => 'Student Updated successfully']);
     }
 

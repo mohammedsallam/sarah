@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
 
         $password = password_hash($password, CRYPT_BLOWFISH);
-        $sql = "INSERT INTO students SET name='$name', last_name = '$last_name', username = '$username' email='$email', password='$password', year_id = '$year_id', section_id = '$section_id'";
+        $sql = "INSERT INTO students SET name='$name', last_name = '$last_name', username = '$username', email='$email', password='$password', year_id = '$year_id', section_id = '$section_id'";
         $result = mysqli_query($conn, $sql);
 //        $student_id = mysqli_insert_id($conn);
 //        $sql = "INSERT INTO fees SET student_id='$student_id', section_id='$section_id', fees='$fess', payed='$payed', remaining = '$remaining'";

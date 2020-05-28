@@ -59,7 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
            $sql = "UPDATE teachers SET name='$name', section_id = '$section_id',year_id = '$year_id', last_name = '$last_name', username = '$username',email='$email', phone='$phone' WHERE id ='$id'";
        }
 
+        $subject_sql = "UPDATE subjects SET section_id = '$section_id',year_id = '$year_id' WHERE teacher_id ='$id'";
+
         $result = mysqli_query($conn, $sql);
+        $result = mysqli_query($conn, $subject_sql);
         echo json_encode(['status' => 1, 'message' => 'Teacher Updated successfully']);
     }
 

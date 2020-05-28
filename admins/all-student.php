@@ -96,7 +96,7 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
                             <td><?= date('Y-m-d', strtotime($student['created_at'])) ?></td>
                             <td>
                                 <a href="#" data-toggle="modal" data-target="#delete_modal" data-href="<?=APP?>/controllers/students/delete.php?id=<?=$student['id']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
-                                <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/students/get_info.php?id=<?=$student['id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
+                                <a data-toggle="modal" data-target="#edit_modal" href="#" data-href="<?=APP?>/controllers/students/get_info.php?id=<?=$student['id']?>&section_id=<?=$_GET['section_id']?>" class="btn btn-info btn-sm edit_link"><i class="fa fa-pen-alt"></i></a>
                                 <a href="<?=APP?>/admins/more-student.php?student_id=<?=$student['id']?>&year_id=<?=$_GET['year_id']?>&section_id=<?=$_GET['section_id']?>" class="btn btn-info btn-sm"><i class="fa fa-user"></i></a>
                             </td>
                         </tr>
@@ -125,7 +125,7 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit teacher</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit student</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -142,12 +142,12 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
     </div>
 </div>
 
-<!-- Delete teacher modal -->
+<!-- Delete student modal -->
 <div class="modal fade delete_modal" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Teacher</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Delete Student</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -217,50 +217,6 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
             e.preventDefault();
             $('.delete_modal a').attr('href', $(this).data('href'));
             $(this).addClass('deleted')
-
-            // let form = $('.add_teacher_form'), error = [];
-            //
-            // $('.add_teacher_form input').each(function () {
-            //     if ($(this).val() === ''){
-            //         error.push(true);
-            //         $(this).css({
-            //             border: '1px solid red'
-            //         });
-            //
-            //         $(this).focus(function () {
-            //             $(this).css({
-            //                 border: '1px solid #ced4da'
-            //             });
-            //         });
-            //     }
-            //
-            // });
-            //
-            // if (error.length === 0){
-            //     $.ajax({
-            //         url: form.attr('action'),
-            //         type: form.attr('method'),
-            //         dataType: 'json',
-            //         data: form.serialize(),
-            //         success: function (data) {
-            //             if (data.status === 0){
-            //                 $('.error_message').removeClass('d-none').html(data.message);
-            //                 $('.success_message').addClass('d-none').html('');
-            //             } else {
-            //                 $('.success_message').removeClass('d-none').html(data.message);
-            //                 $('.error_message').addClass('d-none').html('');
-            //                 let buffer = setInterval(function () {
-            //                     $('.success_message').addClass('d-none').html('');
-            //                     clearInterval(buffer)
-            //                 }, 3000);
-            //                 // $('input[type="password"]').each(function () {
-            //                 //     $(this).val('')
-            //                 // })
-            //             }
-            //         }
-            //     });
-            // }
-
         });
 
         $('.delete_modal a').click(function (e) {
@@ -286,6 +242,21 @@ $students = $result->fetch_all(MYSQLI_ASSOC);
                     $('.deleted').parents('tr').remove();
                 }
             })
+        });
+
+        $( document).on('change', '.modal-body .section_id', function () {
+            if ($(this).val() !== ''){
+                $.ajax({
+                    url: '../controllers/students/get_section_year.php',
+                    type: 'GET',
+                    dataType: 'html',
+                    data: {section_id: $(this).val()},
+                    success: function (data) {
+                        $('.modal-body .year_id').html(data)
+                    }
+
+                })
+            }
         })
     })
 </script>

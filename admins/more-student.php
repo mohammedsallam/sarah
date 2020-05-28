@@ -22,23 +22,25 @@ $year_id = @$_GET['year_id'];
 $student_id = @$_GET['student_id'];
 $section_id = @$_GET['section_id'];
 
-$subjectSql = "SELECT teachers.name AS 'TEACHER', subjects.* FROM subjects LEFT JOIN teachers ON teachers.id=subjects.teacher_id WHERE year_id = '$year_id' ";
-$result = mysqli_query($conn, $subjectSql);
+$sql = "SELECT teachers.name AS 'TEACHER', subjects.* FROM subjects 
+            LEFT JOIN teachers ON teachers.id=subjects.teacher_id 
+            WHERE subjects.year_id = '$year_id' AND subjects.section_id = '$section_id'";
+$result = mysqli_query($conn, $sql);
 $subjects = $result->fetch_all(MYSQLI_ASSOC);
 $teacherCount = $result->num_rows;
 
 
-$yearsSql = "SELECT * FROM years WHERE id = '$year_id'";
-$result = mysqli_query($conn, $yearsSql);
+$sql = "SELECT * FROM years WHERE id = '$year_id'";
+$result = mysqli_query($conn, $sql);
 $years = $result->fetch_assoc();
 
-$markSql = "SELECT subjects.name AS 'SUBNAME' , 
+$sql = "SELECT subjects.name AS 'SUBNAME' , 
                  subjects.id AS 'SUBID', years.name AS 'YEARNAME', years.id AS 'YID', marks.*
                   FROM marks
                  LEFT JOIN subjects ON subjects.id=marks.subject_id
                  LEFT JOIN years ON years.id=marks.year_id
                 WHERE marks.year_id = '$year_id' AND marks.student_id = '$student_id' AND marks.section_id = '$section_id' ";
-$result = mysqli_query($conn, $markSql);
+$result = mysqli_query($conn, $sql);
 $marks = $result->fetch_all(MYSQLI_BOTH);
 $teacherCount = $result->num_rows;
 
@@ -167,6 +169,7 @@ $fees = $result->fetch_all(MYSQLI_BOTH);
                                 <td><?= $mark['session']?></td>
                                 <td>
                                     <a data-toggle="modal" data-target="#edit_marks_modal" href="#" data-href="<?=APP?>/controllers/students/get_marks_info.php?student_id=<?=$student_id?>&year_id=<?=$year_id?>&section_id=<?=$section_id?>&subject_id=<?=$id?>" class="btn btn-info btn-sm edit_marks_link"><i class="fa fa-pen-alt"></i></a>
+                                    <a data-toggle="modal" data-target="#delete_modal" href="#" data-href="<?=APP?>/controllers/students/delete-mark.php?id=<?=$mark['id']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -233,6 +236,7 @@ $fees = $result->fetch_all(MYSQLI_BOTH);
                                 <td><?= $fee['ticket']?></td>
                                 <td>
                                     <a data-toggle="modal" data-target="#edit_fees_modal" href="#" data-href="<?=APP?>/controllers/students/get_fees_info.php?student_id=<?=$student_id?>&year_id=<?=$year_id?>&fees_id=<?=$fee['id']?>" class="btn btn-info btn-sm edit_fees_link"><i class="fa fa-pen-alt"></i></a>
+                                    <a data-toggle="modal" data-target="#delete_modal" href="#" data-href="<?=APP?>/controllers/students/delete-fee.php?id=<?=$fee['id']?>" class="btn btn-danger btn-sm delete_link"><i class="fa fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -253,7 +257,7 @@ $fees = $result->fetch_all(MYSQLI_BOTH);
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit teacher</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit marks</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -275,7 +279,7 @@ $fees = $result->fetch_all(MYSQLI_BOTH);
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit teacher</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Fees</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -287,6 +291,26 @@ $fees = $result->fetch_all(MYSQLI_BOTH);
             </div>
             <div class="modal-footer">
                 <a class="btn btn-success btn-block do_edit_fees_link" href="#">Edit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete marks modal -->
+<div class="modal fade delete_modal" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Confirmation</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3><i class="fa fa-exclamation-triangle text-danger"></i> <span>Are you sure?</span></h3>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void" class="btn btn-danger btn-block">Delete</a>
             </div>
         </div>
     </div>
@@ -394,7 +418,6 @@ $fees = $result->fetch_all(MYSQLI_BOTH);
 
         });
 
-
         // Fees section
         $('.add_fees_button').click(function (e) {
             e.preventDefault();
@@ -488,5 +511,42 @@ $fees = $result->fetch_all(MYSQLI_BOTH);
 
 
         });
+
+
+        $('.delete_link').click(function (e) {
+            e.preventDefault();
+            $('.delete_modal a').data('href', $(this).data('href')).addClass('action');
+            $(this).addClass('deleted')
+
+        });
+
+        $('.delete_modal a').click(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: $(this).data('href'),
+                type: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.status === 0){
+                        $('.error_message').removeClass('d-none').html(data.message);
+                        $('.success_message').addClass('d-none').html('');
+                    } else {
+                        $('.success_message').removeClass('d-none').html(data.message);
+                        $('.error_message').addClass('d-none').html('');
+                        let buffer = setInterval(function () {
+                            $('.success_message').addClass('d-none').html('');
+                            clearInterval(buffer)
+                        }, 3000);
+                    }
+
+                    $('.delete_modal').modal('hide');
+                    $('.deleted').parents('tr').remove();
+                }
+            })
+        })
+
+
+
     })
 </script>

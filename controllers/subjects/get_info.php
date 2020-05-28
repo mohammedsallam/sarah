@@ -25,13 +25,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     $result = mysqli_query($conn, $sectionSql);
     $sections = $result->fetch_all(MYSQLI_ASSOC);
 
-    $yearsSql = "SELECT * FROM years";
+    $year_id = $subject['YID'];
+    $yearsSql = "SELECT * FROM years WHERE id ='$year_id'";
     $result = mysqli_query($conn, $yearsSql);
-    $years = $result->fetch_all(MYSQLI_ASSOC);
+    $year = $result->fetch_array(MYSQLI_ASSOC);
 
-    $yearsSql = "SELECT * FROM teachers";
-    $result = mysqli_query($conn, $yearsSql);
-    $teachers = $result->fetch_all(MYSQLI_ASSOC);
+    $teacher_id = $subject['teacher_id'];
+    $teacherSql = "SELECT * FROM teachers WHERE id = '$teacher_id'";
+    $result = mysqli_query($conn, $teacherSql);
+    $teacher = $result->fetch_array(MYSQLI_ASSOC);
 
     $yearsSql = "SELECT * FROM semesters";
     $result = mysqli_query($conn, $yearsSql);
@@ -46,33 +48,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     </div>
     <div class="form-group col-md-6">
         <label for="teacher_id">Teacher</label>
-        <select name="teacher_id" id="teacher_id" class="form-control">
-            <option value="">Select teacher</option>
-            <?php
-            foreach ($teachers as $teacher) { ?>
-                <option <?php if($teacher['id'] == $subject['TID']) { echo 'selected'; }?> value="<?= $teacher['id']?>"><?= $teacher['name']?></option>
-            <?php } ?>
-        </select>
+        <input type="text" class="form-control bg-white" readonly  value="<?=$teacher['name']?>">
+        <input type="hidden" name="teacher_id" value="<?=$teacher['id']?>">
     </div>
     <div class="form-group col-md-6">
         <label for="section_id">Department</label>
-        <select name="section_id" id="section_id" class="form-control">
-            <option value="">Select Department</option>
-            <?php
-            foreach ($sections as $section) { ?>
-                <option <?php if($section['id'] == $subject['SID']) { echo 'selected'; }?> value="<?= $section['id']?>"><?= $section['name']?></option>
-            <?php } ?>
-        </select>
+        <input type="text" class="form-control bg-white" readonly  value="<?=$subject['SNAME']?>">
+        <input type="hidden" name="section_id" value="<?=$subject['SID']?>">
     </div>
     <div class="form-group col-md-6">
         <label for="year_id">Year</label>
-        <select name="year_id" id="year_id" class="form-control">
-            <option value="">Select year</option>
-            <?php
-            foreach ($years as $year) { ?>
-                <option <?php if($year['id'] == $subject['YID']) { echo 'selected'; }?> value="<?= $year['id']?>"><?= $year['name']?></option>
-            <?php } ?>
-        </select>
+        <input type="text" class="form-control bg-white" readonly  value="<?=$year['name']?>">
+        <input type="hidden" name="year_id" value="<?=$year['id']?>">
     </div>
     <div class="form-group col-md-6">
         <label for="semester">Semester</label>

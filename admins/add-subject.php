@@ -14,8 +14,9 @@ include('../layout/header.php');
 include('layout/sidebar.php');
 
 include('layout/topnav.php');
+$section_id = $_GET['section_id'];
 
-$teacherSql = "SELECT * FROM teachers";
+$teacherSql = "SELECT * FROM teachers WHERE section_id = '$section_id'";
 $result = mysqli_query($conn, $teacherSql);
 $teachers = $result->fetch_all(MYSQLI_ASSOC);
 $teacherCount = $result->num_rows;
@@ -36,7 +37,7 @@ $sql = "SELECT * FROM semesters";
 $result = mysqli_query($conn, $sql);
 $semesters = $result->fetch_all(MYSQLI_ASSOC);
 
-$section_id = $_GET['section_id'];
+
 ?>
 
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -91,7 +92,7 @@ $section_id = $_GET['section_id'];
                     </div>
                     <div class="form-group col-md-6">
                         <label for="teacher_id">Teacher</label>
-                        <select name="teacher_id" id="teacher_id" class="form-control">
+                        <select name="teacher_id" id="teacher_id" class="form-control teacher_id">
                             <option value="">Select teacher</option>
                             <?php
                             foreach ($teachers as $teacher) { ?>
@@ -102,25 +103,12 @@ $section_id = $_GET['section_id'];
                     <div class="form-group col-md-6">
                         <label for="name">Department</label>
                         <input readonly type="text" id="name" class="form-control bg-white" value="<?=$_GET['section']?>">
-                        <input type="hidden" name="section_id" value="<?=$section_id?>">
+                        <input type="hidden" class="section_id" name="section_id" value="<?=$section_id?>">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="year_id">Year</label>
-                        <?php
-                        $yearsSql = "SELECT section_years.*, years.name, years.id AS YID FROM section_years
-                            LEFT JOIN years on years.id=section_years.year_id
-                            WHERE section_years.section_id = '$section_id' GROUP BY years.id";
-                        $result = mysqli_query($conn, $yearsSql);
-                        $years = $result->fetch_all(MYSQLI_ASSOC);
-
-
-                        ?>
-                        <select name="year_id" id="year_id" class="form-control">
-                            <option value="">Select year</option>
-                            <?php
-                            foreach ($years as $year) { ?>
-                                <option value="<?= $year['YID']?>"><?= $year['name']?></option>
-                            <?php } ?>
+                        <select name="year_id" id="year_id" class="form-control year_id">
+                            <option value="">Select Teacher first</option>
                         </select>
                     </div>
                     <div class="form-group col-md-6">
@@ -204,6 +192,22 @@ $section_id = $_GET['section_id'];
             }
 
 
+        })
+
+        $(document).on('change', '.teacher_id', function(){
+            if ($(this).val() !== ''){
+                $.ajax({
+                    url: '../controllers/subjects/get_teacher_info.php',
+                    type: 'GET',
+                    dataType: 'html',
+                    data: {teacher_id: $(this).val()},
+                    success: function (data) {
+                        $('.year_id').html(data)
+                    }
+                })
+            } else {
+                $('.year_id').html('<option>Select Section</option>')
+            }
         })
     })
 </script>

@@ -115,7 +115,7 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit teacher</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit subject</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -275,6 +275,22 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
                     $('.deleted').parents('tr').remove();
                 }
             })
+        })
+
+        $(document).on('change', '.edit_modal .section_id', function(){
+            if ($(this).val() !== ''){
+                $.ajax({
+                    url: '../controllers/subjects/get_section_year.php',
+                    type: 'GET',
+                    dataType: 'html',
+                    data: {section_id: $(this).val()},
+                    success: function (data) {
+                        $('.year_id').html(data)
+                    }
+                })
+            } else {
+                $('.edit_modal .year_id').html('<option>Select Section</option>')
+            }
         })
     })
 </script>

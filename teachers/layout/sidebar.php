@@ -4,6 +4,10 @@ $sql = "SELECT * FROM teachers WHERE id = '$id'";
 $result = mysqli_query($conn, $sql);
 $teacher = $result->fetch_array(MYSQLI_ASSOC);
 
+$teacher_id = $teacher['id'];
+$sql = "SELECT * FROM subjects WHERE teacher_id = '$teacher_id'";
+//dd($sql);
+
 $section = $teacher['section'];
 $sql = "SELECT  sections.* FROM sections
                     LEFT JOIN section_years on sections.id=section_years.section_id WHERE sections.name = '$section' GROUP BY sections.id ";
