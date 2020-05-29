@@ -240,7 +240,7 @@ $files = $result->fetch_all(MYSQLI_ASSOC);
                     $('.deleted').parents('tr').remove();
                 }
             })
-        })
+        });
 
         $('.subject_id').change(function () {
             let subject_id = $(this).val();

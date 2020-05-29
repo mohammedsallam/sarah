@@ -140,7 +140,7 @@ $subjects = $result->fetch_all(MYSQLI_ASSOC);
 
             $('.add_file_form input, select').each(function () {
                 if ($(this).val() === ''){
-                    error.push(true);
+                    // error.push(true);
                     $(this).css({
                         border: '1px solid red'
                     });
