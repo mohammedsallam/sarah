@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>Project S.E.I</title>
+        <title>University App</title>
 
         <!-- Custom fonts -->
         <link href="<?=ASSETS.'vendor/fontawesome-free/css/all.min.css'?>" rel="stylesheet" type="text/css">
