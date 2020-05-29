@@ -7,20 +7,41 @@ if (!isset($_SESSION['sign_type']) || $_SESSION['sign_type'] != 1){
 }
 require('../connection.php');
 
+
+$id = $_SESSION['id'];
+$sql = "SELECT * FROM admins WHERE id = '$id'";
+$result = mysqli_query($conn, $sql);
+$admin = $result->fetch_array(MYSQLI_ASSOC);
+
 include('../layout/header.php');
 
 include('layout/sidebar.php');
 
 include('layout/topnav.php');
 
-$teacherSql = "SELECT * FROM teachers";
-$result = mysqli_query($conn, $teacherSql);
+$sql = "SELECT * FROM teachers";
+$result = mysqli_query($conn, $sql);
 $teacherCount = $result->num_rows;
 
-$studentSql = "SELECT * FROM students";
-$result = mysqli_query($conn, $studentSql);
+$sql = "SELECT * FROM students";
+$result = mysqli_query($conn, $sql);
 $studentCount = $result->num_rows;
 
+$sql = "SELECT * FROM schedules";
+$result = mysqli_query($conn, $sql);
+$scheduleCount = $result->num_rows;
+
+$sql = "SELECT * FROM subjects";
+$result = mysqli_query($conn, $sql);
+$subjectCount = $result->num_rows;
+
+$sql = "SELECT * FROM exams";
+$result = mysqli_query($conn, $sql);
+$examCount = $result->num_rows;
+
+$sql = "SELECT * FROM courses";
+$result = mysqli_query($conn, $sql);
+$courseCount = $result->num_rows;
 
 
 ?>
@@ -29,7 +50,7 @@ $studentCount = $result->num_rows;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Change password</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -38,8 +59,12 @@ $studentCount = $result->num_rows;
                 <div class="alert alert-danger d-none error_message text-center"></div>
                 <div class="alert alert-success d-none success_message text-center"></div>
                 <form class="password_form" action="<?=APP?>/controllers/profile.php" method="post">
-                    <input type="hidden" name="id" value="<?=$_SESSION['id']?>">
-                    <input type="hidden" name="type" value="3">
+                    <input type="hidden" name="id" value="<?=@$admin['id']?>">
+                    <input type="hidden" name="type" value="1">
+                    <div class="form-group">
+                        <label for="name">name</label>
+                        <input type="text" id="name" name="name" class="form-control" value="<?=@$admin['name']?>">
+                    </div>
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password" class="form-control">
@@ -65,7 +90,6 @@ $studentCount = $result->num_rows;
 
     <!-- Content Row -->
     <div class="row">
-
         <!-- Total Teacher Card -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
@@ -99,64 +123,74 @@ $studentCount = $result->num_rows;
                 </div>
             </div>
         </div>
-        <!-- Total Students A.I.A. -->
 
-<!--        <div class="col-xl-3 col-md-6 mb-4">-->
-<!--            <div class="card border-left-success shadow h-100 py-2">-->
-<!--                <div class="card-body">-->
-<!--                    <div class="row no-gutters align-items-center">-->
-<!--                        <div class="col mr-2">-->
-<!--                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">A.I.A</div>-->
-<!--                            <div class="h5 mb-0 font-weight-bold text-gray-800">120</div>-->
-<!--                        </div>-->
-<!--                        <div class="col-auto">-->
-<!--                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!-- Total schedules Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total schedules</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?=$scheduleCount?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <!-- Total Students Industrial Engineering -->
+        <!-- Total subjects Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total subjects</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?=$subjectCount?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!--        <div class="col-xl-3 col-md-6 mb-4">-->
-<!--            <div class="card border-left-info shadow h-100 py-2">-->
-<!--                <div class="card-body">-->
-<!--                    <div class="row no-gutters align-items-center">-->
-<!--                        <div class="col mr-2">-->
-<!--                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Industrial Engineering</div>-->
-<!--                            <div class="row no-gutters align-items-center">-->
-<!--                                <div class="col-auto">-->
-<!--                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">100</div>-->
-<!--                                </div>-->
-<!---->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-auto">-->
-<!--                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!-- Total exams Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total exams</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?=$examCount?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <!-- Total Students Computer Science -->
-
-<!--        <div class="col-xl-3 col-md-6 mb-4">-->
-<!--            <div class="card border-left-warning shadow h-100 py-2">-->
-<!--                <div class="card-body">-->
-<!--                    <div class="row no-gutters align-items-center">-->
-<!--                        <div class="col mr-2">-->
-<!--                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Computer Science</div>-->
-<!--                            <div class="h5 mb-0 font-weight-bold text-gray-800">90</div>-->
-<!--                        </div>-->
-<!--                        <div class="col-auto">-->
-<!--                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!-- Total courses Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total courses</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?=$courseCount?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -170,7 +204,7 @@ $studentCount = $result->num_rows;
 
             let form = $('.password_form');
 
-            $('input[type="password"]').each(function () {
+            $('.password_form input[type="text"]').each(function () {
                 if ($(this).val() === ''){
                     $(this).css({
                         border: '1px solid red'
@@ -200,11 +234,13 @@ $studentCount = $result->num_rows;
                         $('.modal .error_message').addClass('d-none').html('');
                         let buffer = setInterval(function () {
                             $('.modal .success_message').addClass('d-none').html('');
+                            window.location.reload();
                             clearInterval(buffer)
-                        }, 3000);
+                        }, 1000);
                         $('input[type="password"]').each(function () {
                             $(this).val('')
                         })
+
                     }
                 }
             });

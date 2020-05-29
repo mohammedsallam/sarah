@@ -241,75 +241,60 @@ $sections = $result->fetch_all(MYSQLI_ASSOC);
 
 
       <!-- Start Sections -->
-      <hr class="sidebar-divider">
-
-      <!-- TEACHER Hea  ding -->
-      <div class="sidebar-heading">
-          Sections
-      </div>
-
-      <!-- Nav Item - TEACHERS -->
-      <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#section" aria-expanded="true" aria-controls="collapse">
-              <i class="fas fa-fw fa-cog"></i>
-              <span>Sections</span>
-          </a>
-          <div id="section" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-              <div class="bg-white py-2 collapse-inner rounded">
-                  <a class="collapse-item" href="<?=APP?>/admins/add-section.php">Add Section</a>
-                  <a class="collapse-item" href="<?=APP?>/admins/all-section.php">Sections</a>
-              </div>
-          </div>
-      </li>
-
+<!--      <hr class="sidebar-divider">-->
+<!--      <div class="sidebar-heading">-->
+<!--          Sections-->
+<!--      </div>-->
+<!--      <li class="nav-item">-->
+<!--          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#section" aria-expanded="true" aria-controls="collapse">-->
+<!--              <i class="fas fa-fw fa-cog"></i>-->
+<!--              <span>Sections</span>-->
+<!--          </a>-->
+<!--          <div id="section" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
+<!--              <div class="bg-white py-2 collapse-inner rounded">-->
+<!--                  <a class="collapse-item" href="--><?//=APP?><!--/admins/add-section.php">Add Section</a>-->
+<!--                  <a class="collapse-item" href="--><?//=APP?><!--/admins/all-section.php">Sections</a>-->
+<!--              </div>-->
+<!--          </div>-->
+<!--      </li>-->
       <!-- End Sections -->
 
       <!-- Start years -->
-      <hr class="sidebar-divider">
-
-      <!-- TEACHER Heading -->
-      <div class="sidebar-heading">
-          years
-      </div>
-
-      <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#year" aria-expanded="true" aria-controls="collapse">
-              <i class="fas fa-fw fa-cog"></i>
-              <span>Years</span>
-          </a>
-          <div id="year" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-              <div class="bg-white py-2 collapse-inner rounded">
-                  <a class="collapse-item" href="<?=APP?>/admins/add-year.php">Add Year</a>
-                  <a class="collapse-item" href="<?=APP?>/admins/all-year.php">years</a>
-              </div>
-          </div>
-      </li>
-
+<!--      <hr class="sidebar-divider">-->
+<!--      <div class="sidebar-heading">-->
+<!--          years-->
+<!--      </div>-->
+<!--      <li class="nav-item">-->
+<!--          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#year" aria-expanded="true" aria-controls="collapse">-->
+<!--              <i class="fas fa-fw fa-cog"></i>-->
+<!--              <span>Years</span>-->
+<!--          </a>-->
+<!--          <div id="year" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
+<!--              <div class="bg-white py-2 collapse-inner rounded">-->
+<!--                  <a class="collapse-item" href="--><?//=APP?><!--/admins/add-year.php">Add Year</a>-->
+<!--                  <a class="collapse-item" href="--><?//=APP?><!--/admins/all-year.php">years</a>-->
+<!--              </div>-->
+<!--          </div>-->
+<!--      </li>-->
       <!-- End years -->
 
       <!-- Start semesters -->
-      <hr class="sidebar-divider">
-
-      <!-- TEACHER Heading -->
-
-
-      <div class="sidebar-heading">
-          Semester
-      </div>
-
-      <li class="nav-item">
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#semester" aria-expanded="true" aria-controls="collapse">
-              <i class="fas fa-fw fa-cog"></i>
-              <span>Semester</span>
-          </a>
-          <div id="semester" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-              <div class="bg-white py-2 collapse-inner rounded">
-                  <a class="collapse-item" href="<?=APP?>/admins/add-semester.php">Add Semester</a>
-                  <a class="collapse-item" href="<?=APP?>/admins/all-semester.php">Semester</a>
-              </div>
-          </div>
-      </li>
-
+<!--      <hr class="sidebar-divider">-->
+<!--      <div class="sidebar-heading">-->
+<!--          Semester-->
+<!--      </div>-->
+<!--      <li class="nav-item">-->
+<!--          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#semester" aria-expanded="true" aria-controls="collapse">-->
+<!--              <i class="fas fa-fw fa-cog"></i>-->
+<!--              <span>Semester</span>-->
+<!--          </a>-->
+<!--          <div id="semester" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
+<!--              <div class="bg-white py-2 collapse-inner rounded">-->
+<!--                  <a class="collapse-item" href="--><?//=APP?><!--/admins/add-semester.php">Add Semester</a>-->
+<!--                  <a class="collapse-item" href="--><?//=APP?><!--/admins/all-semester.php">Semester</a>-->
+<!--              </div>-->
+<!--          </div>-->
+<!--      </li>-->
       <!-- End semesters -->
 
         <!-- Divider -->

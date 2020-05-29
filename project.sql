@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2020 at 08:11 AM
+-- Generation Time: May 29, 2020 at 06:51 PM
 -- Server version: 10.1.32-MariaDB
 -- PHP Version: 7.2.5
 
@@ -41,7 +41,22 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `name`, `email`, `password`, `created_at`) VALUES
-(1, 'Admin', 'admin@admin.com', '$2y$10$qcH3sL94yt7zM4wqZo467OH9PAhKj2R.N5ZS8jNxkyFgcVPYK4WsK', '2020-04-08');
+(1, 'Admin', 'admin@admin.com', '$2y$10$Xe7V5CoKfyn8rGSpNoPpUOV0vDTHzakbXNSJ3BmbSVMVf8NhsNNyi', '2020-04-08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `courses`
+--
+
+CREATE TABLE `courses` (
+  `id` int(11) NOT NULL,
+  `file` varchar(200) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `section_id` int(11) DEFAULT NULL,
+  `year_id` int(11) DEFAULT NULL,
+  `semester` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -52,9 +67,10 @@ INSERT INTO `admins` (`id`, `name`, `email`, `password`, `created_at`) VALUES
 CREATE TABLE `exams` (
   `id` int(11) NOT NULL,
   `file` varchar(200) DEFAULT NULL,
-  `subject_id` int(11) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `section_id` int(11) DEFAULT NULL,
   `year_id` int(11) DEFAULT NULL,
-  `semester_id` int(11) DEFAULT NULL
+  `semester` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -74,17 +90,6 @@ CREATE TABLE `fees` (
   `ticket` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `fees`
---
-
-INSERT INTO `fees` (`id`, `student_id`, `year_id`, `fees`, `payed`, `remaining`, `fees_type`, `ticket`) VALUES
-(7, 17, 1, '17.00', NULL, NULL, 'Rate 3', '16'),
-(9, 17, 1, '54.00', NULL, NULL, 'Rate 1', '345'),
-(10, 17, 1, '3.00', NULL, NULL, 'Rate 3', '546456'),
-(11, 17, 1, '12.00', NULL, NULL, 'Rate 1', '12'),
-(12, 17, 1, '100.00', NULL, NULL, 'Rate 1', '11');
-
 -- --------------------------------------------------------
 
 --
@@ -101,14 +106,20 @@ CREATE TABLE `marks` (
   `session` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `marks`
+-- Table structure for table `schedules`
 --
 
-INSERT INTO `marks` (`id`, `mark`, `student_id`, `section_id`, `subject_id`, `year_id`, `session`) VALUES
-(9, '500', 17, 9, 1, 1, 'semester'),
-(10, '100', 17, 9, 2, 1, 'semester'),
-(11, '', 0, 0, 0, 0, '');
+CREATE TABLE `schedules` (
+  `id` int(11) NOT NULL,
+  `file` varchar(200) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `section_id` int(11) NOT NULL,
+  `year_id` int(11) NOT NULL,
+  `semester` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -127,9 +138,9 @@ CREATE TABLE `sections` (
 --
 
 INSERT INTO `sections` (`id`, `name`, `fees`) VALUES
-(9, 'A.I.A.', '100.00'),
-(10, 'Software engineering', '200.00'),
-(11, 'Automation engineering', '400.00');
+(1, 'A.I.A.', '100.00'),
+(2, 'Software engineering', '200.00'),
+(3, 'Automation engineering', '400.00');
 
 -- --------------------------------------------------------
 
@@ -148,16 +159,16 @@ CREATE TABLE `section_years` (
 --
 
 INSERT INTO `section_years` (`id`, `year_id`, `section_id`) VALUES
-(59, 1, 9),
-(60, 2, 9),
-(61, 3, 9),
-(62, 4, 9),
-(63, 1, 10),
-(64, 2, 10),
-(65, 3, 10),
-(66, 1, 11),
-(67, 2, 11),
-(68, 3, 11);
+(1, 1, 1),
+(2, 2, 1),
+(3, 3, 1),
+(4, 4, 1),
+(5, 1, 2),
+(6, 2, 2),
+(7, 3, 2),
+(8, 1, 3),
+(9, 2, 3),
+(10, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -196,22 +207,6 @@ CREATE TABLE `students` (
   `created_at` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `students`
---
-
-INSERT INTO `students` (`id`, `name`, `username`, `last_name`, `email`, `password`, `year_id`, `section_id`, `created_at`) VALUES
-(17, 'ewrwerwe', 'dskjfkdf', 'rwerwerwer', 'admin@admin.com', '$2y$10$VViW7KsK277bzK.AtA/U4ekcACxft5EE5nMpiTuOXCD3vhpBrR72m', 1, 9, NULL),
-(18, 'ewrwerwe', 'sdjkfkjdsfh', 'rwerwerwer', 'adqmin@admin.com', '$2y$10$2/ZePhYyvqsjwq/jtyoPH.GJVBbLPe8oQtba9cbwT9R/kP4IxmTCu', 2, 9, NULL),
-(19, 'Mohammed', 'fdjgkjdfg', 'rwerwerwer', 'adqqmin@admin.com', '$2y$10$arFlNnmFkse5DEdFgRfnDeRQYDsTxwyk/y5jQXhr7hvKFoZiVQUd2', 1, 9, NULL),
-(20, 'ewrwerwe', 'jklfdhksjdf', 'rwerwerwer', 'adqqmwin@admin.com', '$2y$10$czk5uGoZJJalyIAPKFmX/eX/xVC1tRTm3NT0GJ24Gu4IKT7XmbHDC', 4, 9, NULL),
-(21, 'fdgfdg', 'ddjkfksjdf', 'fdgfdgfdgfdg', 'mosallam06@gmail.com', '$2y$10$9jtuJkGehu2uzkV4Oot5uec6G9gfLQ18sKMcJ2WV//SxLfPzPGKPi', 1, 10, NULL),
-(22, 'fdgfdg', 'djfhksjdf', 'fdgfdgfdgfdg', 'mosallamd06@gmail.com', '$2y$10$Ks6mcDBq8JlLVMU98BraJOf4xAaxWk4oGZna/ajXBf/TkpIB7mLhu', 2, 10, NULL),
-(23, 'fdgfdg', 'klfdjghkjdfg', 'fdgfdgfdgfdg', 'mosallamdd06@gmail.com', '$2y$10$Q/p5bI8dgpunx56dhd2wZ.sn0x4FkagDle8IO7RFtVlidgyH3kMXy', 3, 10, NULL),
-(24, 'sdfdsfsdf', 'lkdfjgkdj', 'sdfdsfsdf', 'mosallamf06@gmail.com', '$2y$10$Uj0CYbZymbNDokXqNpqsMu8Dfbs7OJdMtJ/8DyW0uyIHdfpurTj.6', 1, 11, NULL),
-(25, 'sdfdsfsdf', 'fdjgkdsjf', 'sdfdsfsdf', 'mosallamfff06@gmail.com', '$2y$10$JYWLez5fAoRAzVasxFFa7OhyJJfdi2ZQWRzwhXeB/32.oXxLABSIy', 2, 11, NULL),
-(26, 'sdfdsfsdf', 'dflkgjfldkgj', 'sdfdsfsdf', 'mosalamfff06@gmail.com', '$2y$10$0hX2m3txrx2/2XDLVJTnEOY8/oopsJ7rpnzxuRN6B0uFIEQ8j0J2u', 3, 11, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -227,32 +222,6 @@ CREATE TABLE `subjects` (
   `credit` enum('0','1','2','3','4','5') NOT NULL,
   `semester` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `subjects`
---
-
-INSERT INTO `subjects` (`id`, `name`, `year_id`, `teacher_id`, `section_id`, `credit`, `semester`) VALUES
-(18, 'علوم السنة الأولى', 1, 1, 9, '3', 'first semester'),
-(19, 'علوم السنة الاولى', 1, 1, 9, '3', 'second semester'),
-(20, 'علوم السنة الثانية', 2, 2, 9, '3', 'first semester'),
-(21, 'علوم السنة الثانية', 2, 2, 9, '3', 'second semester'),
-(22, 'علوم السنة الثالثة', 3, 3, 9, '3', 'first semester'),
-(23, 'علوم السنة الثالثة', 3, 3, 9, '3', 'second semester'),
-(24, 'علوم السنة الرابعة', 4, 4, 9, '3', 'first semester'),
-(25, 'علوم السنة الرابعة', 4, 4, 9, '3', 'second semester'),
-(26, 'منتبنس', 1, 1, 10, '1', 'first semester'),
-(27, 'قثفثقفصق', 1, 1, 10, '1', 'second semester'),
-(28, 'ثفثقفثقؤرءر', 2, 1, 10, '1', 'second semester'),
-(29, 'ثفثقفثقؤرءر', 2, 1, 10, '1', 'first semester'),
-(30, 'بايليبلبيل', 3, 1, 10, '1', 'first semester'),
-(31, 'بايليبلبيل', 3, 1, 10, '1', 'second semester'),
-(32, 'بيل6غ545', 1, 3, 11, '2', 'first semester'),
-(33, 'بيل6غ545', 1, 3, 11, '2', 'second semester'),
-(34, 'لاباسيبيب', 2, 3, 11, '2', 'second semester'),
-(35, 'لاباسيبيب', 2, 3, 11, '2', 'first semester'),
-(36, 'يبلرلاسيبسيب', 3, 4, 11, '2', 'first semester'),
-(37, 'يبلرلاسيبسيب', 3, 4, 11, '2', 'second semester');
 
 -- --------------------------------------------------------
 
@@ -271,22 +240,6 @@ CREATE TABLE `subject_files` (
   `semester` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `subject_files`
---
-
-INSERT INTO `subject_files` (`id`, `file`, `name`, `subject_id`, `section_id`, `teacher_id`, `year_id`, `semester`) VALUES
-(18, '/uploads/subjects/1589263109.pdf', 'الملف الأول', 18, 9, NULL, 1, 'first semester'),
-(19, '/uploads/subjects/1589256996.pdf', 'شسييش4فمات', 20, 9, NULL, 2, 'first semester'),
-(20, '/uploads/subjects/1589257006.pdf', 'شسييش4فمات', 25, 9, NULL, 4, 'second semester'),
-(22, '/uploads/subjects/1589257038.pdf', 'يبلبيلالناتت', 30, 10, NULL, 3, 'first semester'),
-(23, '/uploads/subjects/1589257042.pdf', 'يبلبيلالناتت', 31, 10, NULL, 3, 'second semester'),
-(24, '/uploads/subjects/1589257058.pdf', 'لاتلاتيبليل', 36, 11, NULL, 3, 'first semester'),
-(25, '/uploads/subjects/1589257064.pdf', 'سششسيرىتالات', 37, 11, NULL, 3, 'second semester'),
-(26, '/uploads/subjects/1589257069.pdf', 'بلاصقصثقصقث', 33, 11, NULL, 1, 'second semester'),
-(27, '/uploads/subjects/1589257091.pdf', 'لابيل43345', 37, 11, NULL, 3, 'second semester'),
-(28, '/uploads/subjects/1589257101.pdf', 'بيليبصثصثق', 35, 11, NULL, 2, 'first semester');
-
 -- --------------------------------------------------------
 
 --
@@ -303,16 +256,6 @@ CREATE TABLE `teachers` (
   `password` varchar(100) NOT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `teachers`
---
-
-INSERT INTO `teachers` (`id`, `name`, `last_name`, `username`, `email`, `phone`, `password`, `created_at`) VALUES
-(1, 'Mohammed', 'sallam', 'mo200', 'te@te.com', '002010109184421', '$2y$10$T7/KPvRMJCfBih1aDERHy.6SsNxGGvZWl1nlonOTbSkih00E5KoBW', '2020-04-09 00:00:00'),
-(2, 'Ahmed Sallam', 'sallam', 'ahsallam90', 'mo@mo.com', '002010109184422', '$2y$10$c3k0xRGd3RXLqPt6jfqem.CKRXQ64Q2B53adoKW2fyR06JXL8NVv2', '2020-04-09 00:00:00'),
-(3, 'Mai', 'Adel', 'mai200', 'mo11@mo.com', '002012010918449', '$2y$10$fHUQYGU6JjzATwKPDAoQgO0Tfp.3Lystj9fWfXpnTRkAwVFtUhSqG', '2020-04-09 20:35:49'),
-(4, 'Karem ', 'sallam', 'ka200', 'mo1@mo.com', '002012010918423', '$2y$10$S3zwXNWocZ4za8Un.QPUk.PYLbZEsDSAgYJRbQ4UQGg.oajLMsERq', '2020-04-09 20:36:22');
 
 -- --------------------------------------------------------
 
@@ -346,6 +289,18 @@ ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `courses`
+--
+ALTER TABLE `courses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `exams`
+--
+ALTER TABLE `exams`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `fees`
 --
 ALTER TABLE `fees`
@@ -357,6 +312,13 @@ ALTER TABLE `fees`
 --
 ALTER TABLE `marks`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `schedules`
+--
+ALTER TABLE `schedules`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `section_id` (`section_id`);
 
 --
 -- Indexes for table `sections`
@@ -418,28 +380,46 @@ ALTER TABLE `admins`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `courses`
+--
+ALTER TABLE `courses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `exams`
+--
+ALTER TABLE `exams`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `fees`
 --
 ALTER TABLE `fees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `marks`
 --
 ALTER TABLE `marks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `schedules`
+--
+ALTER TABLE `schedules`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sections`
 --
 ALTER TABLE `sections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `section_years`
 --
 ALTER TABLE `section_years`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `semesters`
@@ -451,25 +431,25 @@ ALTER TABLE `semesters`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `subjects`
 --
 ALTER TABLE `subjects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `subject_files`
 --
 ALTER TABLE `subject_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `years`
@@ -486,6 +466,12 @@ ALTER TABLE `years`
 --
 ALTER TABLE `fees`
   ADD CONSTRAINT `fees_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `schedules`
+--
+ALTER TABLE `schedules`
+  ADD CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `section_years`
