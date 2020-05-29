@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         } elseif ($_POST['type'] == '2'){
 
         } else {
+
             $password = $_POST['password'];
             $conf_password = $_POST['confirm_password'];
             if (empty($password) == true || empty($conf_password) == true){

@@ -39,7 +39,7 @@ $studentCount = $result->num_rows;
                 <div class="alert alert-success d-none success_message text-center"></div>
                 <form class="password_form" action="<?=APP?>/controllers/profile.php" method="post">
                     <input type="hidden" name="id" value="<?=$_SESSION['id']?>">
-                    <input type="hidden" name="type" value="3">
+                    <input type="hidden" name="type" value="2">
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password" class="form-control">

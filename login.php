@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 require('connection.php');
 include('layout/header.php');
 if (isset($_SESSION['sign_type'])){
@@ -44,6 +45,8 @@ if (isset($_SESSION['sign_type'])){
             </form>
         </div>
     </div>
+    <a href="<?=APP.'/students/forget_password.php'?>" class="btn col-md-6"> Forget password ?</a>
+
 </div>
 
 <?php include('layout/footer.php'); ?>

@@ -8,4 +8,15 @@ define('APP', $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/'.basenam
 define('APP_DIR', realpath(__DIR__));
 define('ASSETS', APP.'/assets/');
 
+define('Host', 'smtp.gmail.com');
+define('PORT', 587); // 587 - 465
+define('USER', 'mosallam06@gmail.com');
+define('NAME', 'University App');
+define('PASS', 'thggiodvpht/h0530345592');
+
+include 'PHPMailer/PHPMailer.php';
+include 'PHPMailer/Exception.php';
+include 'PHPMailer/EmailFormat.php';
+include 'PHPMailer/SMTP.php';
+
 
