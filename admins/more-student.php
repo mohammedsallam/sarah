@@ -41,13 +41,13 @@ $sql = "SELECT subjects.name AS 'SUBNAME' ,
                  LEFT JOIN years ON years.id=marks.year_id
                 WHERE marks.year_id = '$year_id' AND marks.student_id = '$student_id' AND marks.section_id = '$section_id' ";
 $result = mysqli_query($conn, $sql);
-$marks = $result->fetch_all(MYSQLI_BOTH);
+$marks = $result->fetch_all(MYSQLI_ASSOC);
 $teacherCount = $result->num_rows;
 
 
-$sql = "SELECT * FROM fees";
+$sql = "SELECT * FROM fees WHERE student_id = '$student_id'";
 $result = mysqli_query($conn, $sql);
-$fees = $result->fetch_all(MYSQLI_BOTH);
+$fees = $result->fetch_all(MYSQLI_ASSOC);
 
 
 ?>
